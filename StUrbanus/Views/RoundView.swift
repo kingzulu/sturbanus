@@ -42,18 +42,24 @@ struct RoundView: View {
                     Label("Sprechen", systemImage: "mic.fill")
                 }
             }
-            ToolbarItem(placement: .bottomBar) {
-                HStack {
-                    Button("Vorheriges", systemImage: "chevron.left") { selectedHole = max(1, selectedHole - 1) }
-                        .disabled(selectedHole <= 1)
-                    Spacer()
-                    Text("Gesamt \(round.totalStrokes) (\(ToPar.format(round.toPar)))")
-                        .font(.subheadline.monospacedDigit())
-                    Spacer()
-                    Button("Nächstes", systemImage: "chevron.right") { selectedHole = min(round.holeScores.count, selectedHole + 1) }
-                        .disabled(selectedHole >= round.holeScores.count)
-                }
+        }
+        // Eigene Leiste statt Toolbar-.bottomBar, die von der TabBar verdeckt wird.
+        .safeAreaInset(edge: .bottom) {
+            HStack {
+                Button("Vorheriges", systemImage: "chevron.left") { selectedHole = max(1, selectedHole - 1) }
+                    .disabled(selectedHole <= 1)
+                Spacer()
+                Text("Gesamt \(round.totalStrokes) (\(ToPar.format(round.toPar)))")
+                    .font(.subheadline.monospacedDigit())
+                Spacer()
+                Button("Nächstes", systemImage: "chevron.right") { selectedHole = min(round.holeScores.count, selectedHole + 1) }
+                    .disabled(selectedHole >= round.holeScores.count)
             }
+            .labelStyle(.iconOnly)
+            .font(.title3)
+            .padding(.horizontal)
+            .padding(.vertical, 10)
+            .background(.bar)
         }
         .sheet(isPresented: $showVoice) {
             VoiceShotSheet(recognizer: AppleSpeechRecognizer()) { type, result, consequence in
@@ -115,8 +121,25 @@ private struct HoleHeader: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text("Par \(score.par)")
+            // Par direkt in der Runde korrigierbar; gilt auch für künftige Runden.
+            Menu {
+                Picker("Par", selection: Binding(
+                    get: { score.par },
+                    set: { newPar in
+                        score.par = newPar
+                        score.round?.course?.holes.first { $0.number == score.holeNumber }?.par = newPar
+                    }
+                )) {
+                    ForEach(3...6, id: \.self) { Text("Par \($0)").tag($0) }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text("Par \(score.par)")
+                    Image(systemName: "chevron.up.chevron.down").font(.footnote)
+                }
                 .font(.title2.bold())
+            }
+            .tint(.primary)
             Spacer()
             VStack(alignment: .trailing) {
                 Text("\(score.strokes)")

@@ -5,7 +5,7 @@ SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfa
 ## Aufbau
 
 - `project.yml`: XcodeGen-Spezifikation (Quelle der Wahrheit). `StUrbanus.xcodeproj` wird daraus erzeugt.
-- `StUrbanus/Models`: SwiftData-Modelle (Course, Hole, Round, HoleScore, Shot), Enums, Seed-Daten (V-Golf St. Urbanus Köln, 18 Löcher, Par 4 als Standard).
+- `StUrbanus/Models`: SwiftData-Modelle (Course, Hole, Round, HoleScore, Shot), Enums, Seed-Daten (V-Golf St. Urbanus Köln, 18 Löcher, Par laut Scorecard, gesamt 72; in der Runde und im Tab „Platz“ änderbar).
 - `StUrbanus/Views`: Runden, Schlag-Erfassung (Schlagart → Ergebnis → Folge), Statistik, Platz (Par editierbar).
 - `StUrbanus/Speech`: Protokoll `SpeechRecognizer`, `AppleSpeechRecognizer` (Speech-Framework, de-DE, auf dem Gerät), `ShotPhraseParser` (deutsche Ansage → Felder).
 - `StUrbanusTests`: Tests für den Parser.
