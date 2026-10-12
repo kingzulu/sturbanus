@@ -29,7 +29,8 @@ final class AppleSpeechRecognizer: SpeechRecognizer {
 
         let session = AVAudioSession.sharedInstance()
         do {
-            try session.setCategory(.record, mode: .measurement, options: .duckOthers)
+            // playAndRecord + allowBluetooth: Bluetooth-Headsets (z. B. AirPods) als Mikrofon nutzen.
+            try session.setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .allowBluetooth])
             try session.setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             throw SpeechRecognizerError.audioSetupFailed(error.localizedDescription)
