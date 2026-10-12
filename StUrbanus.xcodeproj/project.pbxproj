@@ -1,0 +1,514 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1C8FC6243DFA9744D954ADBA /* StUrbanusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC2222450DEED02C70D1F3F /* StUrbanusApp.swift */; };
+		2180A5FF532FE2D74986BB17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05765A34E9B0CCD84EA6EDF3 /* Assets.xcassets */; };
+		24E1368891B3EC1CC879FB29 /* RoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99DA791F7557BC40686B3AE /* RoundsView.swift */; };
+		5FDE6C36A2F880BDED949750 /* ShotPhraseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */; };
+		66C4A625BCAD9D8813A79C50 /* RoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC3921713C3F7EE3970EF49 /* RoundView.swift */; };
+		77CCB6291BF6E5E8190135ED /* ShotEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A89081164E2344228B7EBEC /* ShotEnums.swift */; };
+		79506B358490BB6E92F5169D /* SeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E79CBBD467936E6D952DE /* SeedData.swift */; };
+		8968EEBEA1A775D4765FD358 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4927BB454B3744067D3AF8 /* StatsView.swift */; };
+		94A06A239B04EA1B448D26AD /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CF969ADB4D8214F80D9E27 /* CourseView.swift */; };
+		96567A4EE748376B303E8A54 /* ShotEntryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49108CD2493245B25B58A41A /* ShotEntryPanel.swift */; };
+		AC7D5F557BB8DEEEC008E2AC /* ShotPhraseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD7B377B9F466BC098DD5B8 /* ShotPhraseParserTests.swift */; };
+		B082E7004575DF9B7523C541 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C95D9D97779BA77B09A39C /* Models.swift */; };
+		CB96AAEEE948F3DF674AF22E /* VoiceShotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */; };
+		DCF9A73B21A3B44ED62CFE3C /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */; };
+		EFF80C3DDADD79BA731F0CDC /* AppleSpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC8A2619FD86C923642DD3A /* AppleSpeechRecognizer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B410720B52ABF419DF19F32 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E48799E96E71520F3FD603F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6260BFE8EDDC16F82F6DAA1;
+			remoteInfo = StUrbanus;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		05765A34E9B0CCD84EA6EDF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		080E79CBBD467936E6D952DE /* SeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedData.swift; sourceTree = "<group>"; };
+		1A89081164E2344228B7EBEC /* ShotEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEnums.swift; sourceTree = "<group>"; };
+		4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceShotSheet.swift; sourceTree = "<group>"; };
+		49108CD2493245B25B58A41A /* ShotEntryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEntryPanel.swift; sourceTree = "<group>"; };
+		548647FB369FD84AE1FDC608 /* StUrbanusTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = StUrbanusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		99C95D9D97779BA77B09A39C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPhraseParser.swift; sourceTree = "<group>"; };
+		BCC8A2619FD86C923642DD3A /* AppleSpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSpeechRecognizer.swift; sourceTree = "<group>"; };
+		CBD7B377B9F466BC098DD5B8 /* ShotPhraseParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPhraseParserTests.swift; sourceTree = "<group>"; };
+		CDC2222450DEED02C70D1F3F /* StUrbanusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StUrbanusApp.swift; sourceTree = "<group>"; };
+		D19AE34536D400A1C9CE6B8D /* StUrbanus.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = StUrbanus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D99DA791F7557BC40686B3AE /* RoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsView.swift; sourceTree = "<group>"; };
+		DCC3921713C3F7EE3970EF49 /* RoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundView.swift; sourceTree = "<group>"; };
+		EF4927BB454B3744067D3AF8 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
+		F8CF969ADB4D8214F80D9E27 /* CourseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		037F14E9AD1898CB01125EAF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D19AE34536D400A1C9CE6B8D /* StUrbanus.app */,
+				548647FB369FD84AE1FDC608 /* StUrbanusTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29FB442B52BC17BB38ECEE42 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				99C95D9D97779BA77B09A39C /* Models.swift */,
+				080E79CBBD467936E6D952DE /* SeedData.swift */,
+				1A89081164E2344228B7EBEC /* ShotEnums.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		36FC120593BA1A9A838856B5 /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				BCC8A2619FD86C923642DD3A /* AppleSpeechRecognizer.swift */,
+				AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */,
+				8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */,
+			);
+			path = Speech;
+			sourceTree = "<group>";
+		};
+		979C437C871386A7F9D47873 /* StUrbanus */ = {
+			isa = PBXGroup;
+			children = (
+				9C669D205B1F861043DFB4BA /* App */,
+				29FB442B52BC17BB38ECEE42 /* Models */,
+				B2C13CFF3DE7988941EECF08 /* Resources */,
+				36FC120593BA1A9A838856B5 /* Speech */,
+				A50DC3BA22B9219FC3A2CB5E /* Views */,
+			);
+			path = StUrbanus;
+			sourceTree = "<group>";
+		};
+		9C669D205B1F861043DFB4BA /* App */ = {
+			isa = PBXGroup;
+			children = (
+				CDC2222450DEED02C70D1F3F /* StUrbanusApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A50DC3BA22B9219FC3A2CB5E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F8CF969ADB4D8214F80D9E27 /* CourseView.swift */,
+				D99DA791F7557BC40686B3AE /* RoundsView.swift */,
+				DCC3921713C3F7EE3970EF49 /* RoundView.swift */,
+				49108CD2493245B25B58A41A /* ShotEntryPanel.swift */,
+				EF4927BB454B3744067D3AF8 /* StatsView.swift */,
+				4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A96B224353FFEEA5423EEB5B = {
+			isa = PBXGroup;
+			children = (
+				979C437C871386A7F9D47873 /* StUrbanus */,
+				AFC019C9D9DE1EADDBC18B97 /* StUrbanusTests */,
+				037F14E9AD1898CB01125EAF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AFC019C9D9DE1EADDBC18B97 /* StUrbanusTests */ = {
+			isa = PBXGroup;
+			children = (
+				CBD7B377B9F466BC098DD5B8 /* ShotPhraseParserTests.swift */,
+			);
+			path = StUrbanusTests;
+			sourceTree = "<group>";
+		};
+		B2C13CFF3DE7988941EECF08 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				05765A34E9B0CCD84EA6EDF3 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D6260BFE8EDDC16F82F6DAA1 /* StUrbanus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C35F3E9D1F4CCF7C2F77CB1 /* Build configuration list for PBXNativeTarget "StUrbanus" */;
+			buildPhases = (
+				6EC9533F6902C0D63619632F /* Sources */,
+				050214233B85306BD5733F2E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StUrbanus;
+			packageProductDependencies = (
+			);
+			productName = StUrbanus;
+			productReference = D19AE34536D400A1C9CE6B8D /* StUrbanus.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F2067F9CCD48D6C0C7A39DD5 /* StUrbanusTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2BF2E4F1BAE626F8202CADAF /* Build configuration list for PBXNativeTarget "StUrbanusTests" */;
+			buildPhases = (
+				825E5E99256D065977E6CAB6 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43E445C25FD2C230EE5291E9 /* PBXTargetDependency */,
+			);
+			name = StUrbanusTests;
+			packageProductDependencies = (
+			);
+			productName = StUrbanusTests;
+			productReference = 548647FB369FD84AE1FDC608 /* StUrbanusTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E48799E96E71520F3FD603F9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D6260BFE8EDDC16F82F6DAA1 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					F2067F9CCD48D6C0C7A39DD5 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F0AE6A1BA93C3A2C7CC4AC6B /* Build configuration list for PBXProject "StUrbanus" */;
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				de,
+			);
+			mainGroup = A96B224353FFEEA5423EEB5B;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 037F14E9AD1898CB01125EAF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D6260BFE8EDDC16F82F6DAA1 /* StUrbanus */,
+				F2067F9CCD48D6C0C7A39DD5 /* StUrbanusTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		050214233B85306BD5733F2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2180A5FF532FE2D74986BB17 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6EC9533F6902C0D63619632F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFF80C3DDADD79BA731F0CDC /* AppleSpeechRecognizer.swift in Sources */,
+				94A06A239B04EA1B448D26AD /* CourseView.swift in Sources */,
+				B082E7004575DF9B7523C541 /* Models.swift in Sources */,
+				66C4A625BCAD9D8813A79C50 /* RoundView.swift in Sources */,
+				24E1368891B3EC1CC879FB29 /* RoundsView.swift in Sources */,
+				79506B358490BB6E92F5169D /* SeedData.swift in Sources */,
+				96567A4EE748376B303E8A54 /* ShotEntryPanel.swift in Sources */,
+				77CCB6291BF6E5E8190135ED /* ShotEnums.swift in Sources */,
+				5FDE6C36A2F880BDED949750 /* ShotPhraseParser.swift in Sources */,
+				DCF9A73B21A3B44ED62CFE3C /* SpeechRecognizer.swift in Sources */,
+				1C8FC6243DFA9744D954ADBA /* StUrbanusApp.swift in Sources */,
+				8968EEBEA1A775D4765FD358 /* StatsView.swift in Sources */,
+				CB96AAEEE948F3DF674AF22E /* VoiceShotSheet.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		825E5E99256D065977E6CAB6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC7D5F557BB8DEEEC008E2AC /* ShotPhraseParserTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43E445C25FD2C230EE5291E9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D6260BFE8EDDC16F82F6DAA1 /* StUrbanus */;
+			targetProxy = 5B410720B52ABF419DF19F32 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3405F8A2617DDEC18EB18409 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3ACB64F104027FD578EFD18E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zuluindustries.StUrbanusTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StUrbanus.app/StUrbanus";
+			};
+			name = Debug;
+		};
+		4080C6D07BF5AC66D33E45BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "St. Urbanus";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zuluindustries.StUrbanus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		76F4C6F045064A013728037E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.zuluindustries.StUrbanusTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StUrbanus.app/StUrbanus";
+			};
+			name = Release;
+		};
+		9FAA5708734808DD8C017439 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "St. Urbanus";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zuluindustries.StUrbanus;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C8FE83C24FF7B89C6567E677 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2BF2E4F1BAE626F8202CADAF /* Build configuration list for PBXNativeTarget "StUrbanusTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ACB64F104027FD578EFD18E /* Debug */,
+				76F4C6F045064A013728037E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6C35F3E9D1F4CCF7C2F77CB1 /* Build configuration list for PBXNativeTarget "StUrbanus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FAA5708734808DD8C017439 /* Debug */,
+				4080C6D07BF5AC66D33E45BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F0AE6A1BA93C3A2C7CC4AC6B /* Build configuration list for PBXProject "StUrbanus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3405F8A2617DDEC18EB18409 /* Debug */,
+				C8FE83C24FF7B89C6567E677 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E48799E96E71520F3FD603F9 /* Project object */;
+}
