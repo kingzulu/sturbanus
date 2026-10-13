@@ -10,9 +10,33 @@ struct ParsedShot: Equatable, Sendable {
     var isComplete: Bool { shotType != nil && result != nil }
 }
 
+/// Sprachbefehl am Ende einer Ansage.
+enum VoiceCommand: Equatable, Sendable {
+    /// „fertig“, „speichern“: Aufnahme beenden und speichern.
+    case save
+    /// „abbrechen“, „verwerfen“: Ansage verwerfen.
+    case cancel
+}
+
 /// Bildet deutsche Ansagen wie „Siebener Eisen rechts ins Wasser“ auf Schlagart,
 /// Ergebnis und Folge ab. Rein schlüsselwortbasiert, ohne Netz.
 enum ShotPhraseParser {
+    /// Wie `parse`, erkennt aber zusätzlich einen Befehl als letztes Wort
+    /// („… rechts fertig“) und wertet die Ansage ohne dieses Wort aus.
+    static func parseUtterance(_ phrase: String) -> (shot: ParsedShot, command: VoiceCommand?) {
+        var words = normalize(phrase).split(separator: " ").map(String.init)
+        guard let last = words.last else { return (ParsedShot(), nil) }
+
+        let command: VoiceCommand?
+        switch last {
+        case "fertig", "speichern", "eintragen": command = .save
+        case "abbrechen", "verwerfen": command = .cancel
+        default: command = nil
+        }
+        if command != nil { words.removeLast() }
+        return (parse(words.joined(separator: " ")), command)
+    }
+
     static func parse(_ phrase: String) -> ParsedShot {
         var scanner = PhraseScanner(normalize(phrase))
         var parsed = ParsedShot()

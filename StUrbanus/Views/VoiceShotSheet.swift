@@ -1,21 +1,28 @@
 import SwiftUI
 
 /// Sprach-Erfassung: aufnehmen → erkannte Felder anzeigen → bestätigen oder korrigieren → speichern.
+/// Freihändig: „… fertig“ / „… speichern“ oder 2 s Stille speichern, „… abbrechen“ verwirft.
+/// Fehlt Schlagart oder Ergebnis, bleibt die Ansicht offen und markiert das fehlende Feld.
 struct VoiceShotSheet: View {
     let recognizer: any SpeechRecognizer
     let onSave: (ShotType, ShotResult, ShotConsequence?) -> Void
+
+    /// Stille nach erkanntem Text, nach der automatisch beendet und gespeichert wird.
+    private static let silenceTimeout: Duration = .seconds(2)
 
     @Environment(\.dismiss) private var dismiss
     @State private var transcript = ""
     @State private var isListening = false
     @State private var errorMessage: String?
     @State private var parsed = ParsedShot()
+    @State private var showMissing = false
+    @State private var silenceTask: Task<Void, Never>?
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Beispiel: „Siebener Eisen rechts ins Wasser“")
+                    Text("Beispiel: „Siebener Eisen rechts ins Wasser, fertig“")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
 
@@ -28,7 +35,7 @@ struct VoiceShotSheet: View {
                     }
 
                     Button {
-                        isListening ? stopListening() : startListening()
+                        isListening ? finishListening() : startListening()
                     } label: {
                         Label(isListening ? "Fertig" : "Sprechen", systemImage: isListening ? "stop.circle.fill" : "mic.circle.fill")
                             .font(.title2.bold())
@@ -39,15 +46,15 @@ struct VoiceShotSheet: View {
 
                     Divider()
 
-                    Text("Schlagart").font(.headline)
+                    fieldHeader("Schlagart", missing: showMissing && parsed.shotType == nil)
                     BigButtonGrid(items: ShotType.allCases, label: \.label, selected: parsed.shotType, tint: .gray) {
                         parsed.shotType = $0
                     }
-                    Text("Ergebnis").font(.headline)
+                    fieldHeader("Ergebnis", missing: showMissing && parsed.result == nil)
                     BigButtonGrid(items: ShotResult.allCases, label: \.label, selected: parsed.result, tint: .gray) {
                         parsed.result = $0
                     }
-                    Text("Folge (optional)").font(.headline)
+                    fieldHeader("Folge (optional)", missing: false)
                     BigButtonGrid(items: ShotConsequence.allCases, label: \.label, selected: parsed.consequence, tint: .gray) {
                         parsed.consequence = (parsed.consequence == $0) ? nil : $0
                     }
@@ -58,27 +65,37 @@ struct VoiceShotSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
-                        recognizer.stop()
-                        dismiss()
-                    }
+                    Button("Abbrechen") { cancel() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Speichern") {
-                        guard let type = parsed.shotType, let result = parsed.result else { return }
-                        recognizer.stop()
-                        onSave(type, result, parsed.consequence)
-                        dismiss()
-                    }
-                    .disabled(!parsed.isComplete)
+                    Button("Speichern") { trySave() }
+                        .disabled(!parsed.isComplete)
                 }
             }
         }
-        .onDisappear { recognizer.stop() }
+        .onDisappear {
+            silenceTask?.cancel()
+            recognizer.stop()
+        }
     }
+
+    @ViewBuilder
+    private func fieldHeader(_ title: String, missing: Bool) -> some View {
+        HStack {
+            Text(title).font(.headline)
+            if missing {
+                Label("fehlt – bitte antippen", systemImage: "exclamationmark.circle.fill")
+                    .font(.subheadline.bold())
+                    .foregroundStyle(.red)
+            }
+        }
+    }
+
+    // MARK: - Ablauf
 
     private func startListening() {
         errorMessage = nil
+        showMissing = false
         Task {
             guard await recognizer.requestAuthorization() else {
                 errorMessage = SpeechRecognizerError.notAuthorized.localizedDescription
@@ -86,10 +103,7 @@ struct VoiceShotSheet: View {
             }
             do {
                 transcript = ""
-                try await recognizer.start(onTranscript: { text in
-                    transcript = text
-                    parsed = ShotPhraseParser.parse(text)
-                }, onError: { error in
+                try await recognizer.start(onTranscript: handleTranscript, onError: { error in
                     errorMessage = error.localizedDescription
                     stopListening()
                 })
@@ -98,6 +112,32 @@ struct VoiceShotSheet: View {
             } catch {
                 errorMessage = error.localizedDescription
             }
+        }
+    }
+
+    private func handleTranscript(_ text: String) {
+        guard isListening else { return }
+        transcript = text
+        let (shot, command) = ShotPhraseParser.parseUtterance(text)
+        parsed = shot
+
+        switch command {
+        case .cancel:
+            cancel()
+        case .save:
+            finishListening()
+        case nil:
+            restartSilenceTimer()
+        }
+    }
+
+    /// Nach erkanntem Text: bei 2 s ohne neue Wörter automatisch beenden und speichern.
+    private func restartSilenceTimer() {
+        silenceTask?.cancel()
+        silenceTask = Task {
+            try? await Task.sleep(for: Self.silenceTimeout)
+            guard !Task.isCancelled, isListening, !transcript.isEmpty else { return }
+            finishListening()
         }
     }
 
@@ -111,7 +151,30 @@ struct VoiceShotSheet: View {
         }
     }
 
+    /// Aufnahme beenden und speichern, sofern Schlagart und Ergebnis erkannt sind.
+    private func finishListening() {
+        stopListening()
+        trySave()
+    }
+
+    private func trySave() {
+        guard let type = parsed.shotType, let result = parsed.result else {
+            showMissing = true
+            return
+        }
+        stopListening()
+        onSave(type, result, parsed.consequence)
+        dismiss()
+    }
+
+    private func cancel() {
+        stopListening()
+        dismiss()
+    }
+
     private func stopListening() {
+        silenceTask?.cancel()
+        silenceTask = nil
         recognizer.stop()
         isListening = false
     }

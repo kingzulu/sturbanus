@@ -73,4 +73,40 @@ struct ShotPhraseParserTests {
         #expect(ShotPhraseParser.normalize("Fünfer-Eisen, drüber!") == "funfer eisen druber")
         #expect(ShotPhraseParser.normalize("Straße") == "strasse")
     }
+
+    @Test func trailingFertigSavesAndIsStripped() {
+        let (shot, command) = ShotPhraseParser.parseUtterance("Drive rechts ins Aus fertig")
+        #expect(command == .save)
+        #expect(shot == ParsedShot(shotType: .drive, result: .right, consequence: .outOfBounds))
+    }
+
+    @Test func trailingSpeichernSaves() {
+        let (shot, command) = ShotPhraseParser.parseUtterance("Putt zu kurz, speichern.")
+        #expect(command == .save)
+        #expect(shot == ParsedShot(shotType: .putt, result: .short, consequence: nil))
+    }
+
+    @Test func trailingAbbrechenCancels() {
+        let (_, command) = ShotPhraseParser.parseUtterance("Chip links abbrechen")
+        #expect(command == .cancel)
+    }
+
+    @Test func commandOnlyCountsAtTheEnd() {
+        let (shot, command) = ShotPhraseParser.parseUtterance("fertig Drive gut")
+        #expect(command == nil)
+        #expect(shot.shotType == .drive)
+        #expect(shot.result == .good)
+    }
+
+    @Test func noCommandWithoutCommandWord() {
+        let (shot, command) = ShotPhraseParser.parseUtterance("Siebener Eisen rechts ins Wasser")
+        #expect(command == nil)
+        #expect(shot == ParsedShot(shotType: .shortIronWedge, result: .right, consequence: .water))
+    }
+
+    @Test func commandAloneGivesEmptyShot() {
+        let (shot, command) = ShotPhraseParser.parseUtterance("Fertig")
+        #expect(command == .save)
+        #expect(shot == ParsedShot())
+    }
 }

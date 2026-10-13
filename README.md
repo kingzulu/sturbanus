@@ -10,6 +10,8 @@ SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfa
 - `StUrbanus/Speech`: Protokoll `SpeechRecognizer`, `AppleSpeechRecognizer` (Speech-Framework, de-DE, auf dem Gerät), `ShotPhraseParser` (deutsche Ansage → Felder).
 - `StUrbanusTests`: Tests für den Parser.
 
+Sprach-Erfassung: Ansage mit „fertig“ oder „speichern“ beenden (oder 2 s schweigen), dann wird gespeichert, sofern Schlagart und Ergebnis erkannt sind. „abbrechen“ verwirft. Fehlt etwas, bleibt die Ansicht offen und markiert das Feld.
+
 Score eines Lochs = erfasste Schläge + Strafschläge (Aus, Wasser und Strafschlag zählen je +1).
 
 ## Projekt neu erzeugen
