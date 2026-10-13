@@ -19,6 +19,7 @@ struct VoiceShotSheet: View {
     @State private var parsed = ParsedShot()
     @State private var showMissing = false
     @State private var pendingRoundCommand: RoundCommand?
+    @State private var audioLevel: Float = 0
     @State private var silenceTask: Task<Void, Never>?
 
     var body: some View {
@@ -32,6 +33,22 @@ struct VoiceShotSheet: View {
                     Text(transcript.isEmpty ? (isListening ? "Ich höre zu …" : "Tippe auf das Mikrofon und sag deinen Schlag.") : "„\(transcript)“")
                         .font(.title3)
                         .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+
+                    if isListening {
+                        // Pegel: zeigt, ob das Mikrofon überhaupt etwas hört.
+                        HStack(spacing: 8) {
+                            Image(systemName: "mic.fill").foregroundStyle(.secondary)
+                            GeometryReader { geo in
+                                Capsule().fill(Color(.tertiarySystemFill))
+                                    .overlay(alignment: .leading) {
+                                        Capsule().fill(Color.accentColor)
+                                            .frame(width: geo.size.width * CGFloat(audioLevel))
+                                    }
+                            }
+                            .frame(height: 8)
+                        }
+                        .animation(.linear(duration: 0.1), value: audioLevel)
+                    }
 
                     if let errorMessage {
                         Text(errorMessage).foregroundStyle(.red)
@@ -106,6 +123,7 @@ struct VoiceShotSheet: View {
             }
             do {
                 transcript = ""
+                recognizer.onAudioLevel = { audioLevel = $0 }
                 try await recognizer.start(onTranscript: handleTranscript, onError: { error in
                     errorMessage = error.localizedDescription
                     stopListening()

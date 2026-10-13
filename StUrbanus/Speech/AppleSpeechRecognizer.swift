@@ -11,13 +11,14 @@ final class AppleSpeechRecognizer: SpeechRecognizer {
     private static let log = Logger(subsystem: "com.zuluindustries.StUrbanus", category: "Speech")
 
     /// AVAudioSession-Aufrufe blockieren per IPC; deshalb seriell abseits des Main Threads.
-    private static let audioQueue = DispatchQueue(label: "com.zuluindustries.StUrbanus.audiosession")
+    private nonisolated static let audioQueue = DispatchQueue(label: "com.zuluindustries.StUrbanus.audiosession")
 
     private let recognizer = SFSpeechRecognizer(locale: Locale(identifier: "de-DE"))
     private let audioEngine = AVAudioEngine()
     private var request: SFSpeechAudioBufferRecognitionRequest?
     private var task: SFSpeechRecognitionTask?
     private var receivedText = false
+    var onAudioLevel: (@MainActor (Float) -> Void)?
 
     func requestAuthorization() async -> Bool {
         let speechStatus = await withCheckedContinuation { (continuation: CheckedContinuation<SFSpeechRecognizerAuthorizationStatus, Never>) in
@@ -38,6 +39,8 @@ final class AppleSpeechRecognizer: SpeechRecognizer {
         }
 
         try await Self.activateAudioSession()
+        let route = AVAudioSession.sharedInstance().currentRoute.inputs.map(\.portName).joined(separator: ", ")
+        Self.log.info("Audio session active, input: \(route, privacy: .public), on-device supported: \(recognizer.supportsOnDeviceRecognition)")
         try beginRecognition(with: recognizer,
                              onDevice: recognizer.supportsOnDeviceRecognition,
                              onTranscript: onTranscript,
@@ -89,12 +92,21 @@ final class AppleSpeechRecognizer: SpeechRecognizer {
 
         let inputNode = audioEngine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
+        Self.log.info("Starting recognition (onDevice: \(onDevice)), format: \(format.sampleRate) Hz, \(format.channelCount) ch")
         guard format.sampleRate > 0, format.channelCount > 0 else {
             teardownRecognition()
             throw SpeechRecognizerError.noAudioInput
         }
+        let levelHandler = onAudioLevel
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: format) { buffer, _ in
             request.append(buffer)
+            guard let levelHandler, let samples = buffer.floatChannelData?[0], buffer.frameLength > 0 else { return }
+            var sum: Float = 0
+            for i in 0..<Int(buffer.frameLength) { sum += samples[i] * samples[i] }
+            let rms = (sum / Float(buffer.frameLength)).squareRoot()
+            // Grob auf 0…1 abbilden (Sprache liegt etwa bei -40…-10 dBFS).
+            let level = max(0, min(1, (20 * log10(max(rms, 0.000_01)) + 50) / 40))
+            Task { @MainActor in levelHandler(level) }
         }
 
         audioEngine.prepare()
@@ -112,6 +124,7 @@ final class AppleSpeechRecognizer: SpeechRecognizer {
                 // Rückmeldungen einer bereits beendeten Erkennung ignorieren.
                 guard let self, self.request === request else { return }
                 if let text, !text.isEmpty {
+                    if !self.receivedText { Self.log.info("First transcript received") }
                     self.receivedText = true
                     onTranscript(text)
                 }

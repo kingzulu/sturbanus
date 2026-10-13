@@ -33,4 +33,7 @@ protocol SpeechRecognizer: AnyObject {
 
     /// Beendet die Aufnahme.
     func stop()
+
+    /// Optional: Mikrofon-Pegel 0…1, damit man sieht, ob überhaupt Ton ankommt.
+    var onAudioLevel: (@MainActor (Float) -> Void)? { get set }
 }
