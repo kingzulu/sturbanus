@@ -1,8 +1,14 @@
+import AppIntents
 import SwiftData
 import SwiftUI
 
 @main
 struct StUrbanusApp: App {
+    init() {
+        // Siri-Sätze nach Updates sofort neu registrieren.
+        UrbanusShortcuts.updateAppShortcutParameters()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()

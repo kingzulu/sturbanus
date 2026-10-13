@@ -21,6 +21,16 @@ targets:
     platform: iOS
     sources:
       - StUrbanus
+    info:
+      # Wird mit dem generierten Info.plist zusammengeführt. Ausweich-Namen für Siri (iOS erlaubt höchstens 3).
+      path: StUrbanus/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        INAlternativeAppNames:
+          - INAlternativeAppName: Caddy
+          - INAlternativeAppName: Sankt Urbanus
+          - INAlternativeAppName: Golf Caddy
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zuluindustries.StUrbanus

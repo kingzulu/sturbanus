@@ -43,6 +43,7 @@
 		080E79CBBD467936E6D952DE /* SeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedData.swift; sourceTree = "<group>"; };
 		0D50211945FA1CD53B88C88B /* RoundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundService.swift; sourceTree = "<group>"; };
 		1A89081164E2344228B7EBEC /* ShotEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEnums.swift; sourceTree = "<group>"; };
+		34F4609253ED2EC674A9C74D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceShotSheet.swift; sourceTree = "<group>"; };
 		44F72B417A9D4C17F575A58F /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		49108CD2493245B25B58A41A /* ShotEntryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEntryPanel.swift; sourceTree = "<group>"; };
@@ -105,6 +106,7 @@
 		979C437C871386A7F9D47873 /* StUrbanus */ = {
 			isa = PBXGroup;
 			children = (
+				34F4609253ED2EC674A9C74D /* Info.plist */,
 				9C669D205B1F861043DFB4BA /* App */,
 				9343960885CED4893BCD7E3E /* Intents */,
 				29FB442B52BC17BB38ECEE42 /* Models */,
@@ -387,6 +389,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StUrbanus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Urbanus;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
@@ -429,6 +432,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StUrbanus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Urbanus;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";

@@ -98,6 +98,8 @@ struct UrbanusShortcuts: AppShortcutsProvider {
                 "\(.applicationName) Schlag",
                 "Schlag erfassen mit \(.applicationName)",
                 "Schlag in \(.applicationName)",
+                "Schlag mit \(.applicationName)",
+                "Neuer Schlag in \(.applicationName)",
             ],
             shortTitle: "Schlag erfassen",
             systemImageName: "figure.golf"
@@ -107,6 +109,8 @@ struct UrbanusShortcuts: AppShortcutsProvider {
             phrases: [
                 "\(.applicationName) nächstes Loch",
                 "Nächstes Loch in \(.applicationName)",
+                "Nächstes Loch mit \(.applicationName)",
+                "\(.applicationName) weiter",
             ],
             shortTitle: "Nächstes Loch",
             systemImageName: "arrow.right.circle"
@@ -134,6 +138,8 @@ struct UrbanusShortcuts: AppShortcutsProvider {
             phrases: [
                 "\(.applicationName) Spielstand",
                 "Wie steht es in \(.applicationName)",
+                "Spielstand in \(.applicationName)",
+                "Spielstand mit \(.applicationName)",
             ],
             shortTitle: "Spielstand",
             systemImageName: "list.number"
