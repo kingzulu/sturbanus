@@ -12,9 +12,9 @@ settings:
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     STRING_CATALOG_GENERATE_SYMBOLS: YES
-    # Set your (free) Apple ID team in Xcode > Signing & Capabilities,
-    # or put the Team ID here and re-run `xcodegen generate`.
-    DEVELOPMENT_TEAM: ""
+    # Stefans Personal Team (kostenlose Apple-ID). Andere Entwickler: eigene Team-ID eintragen
+    # und `xcodegen generate` ausführen.
+    DEVELOPMENT_TEAM: 2XUJFFJ4X2
 targets:
   StUrbanus:
     type: application
