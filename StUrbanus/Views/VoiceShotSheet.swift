@@ -86,13 +86,27 @@ struct VoiceShotSheet: View {
             }
             do {
                 transcript = ""
-                try recognizer.start { text in
+                try await recognizer.start(onTranscript: { text in
                     transcript = text
                     parsed = ShotPhraseParser.parse(text)
-                }
+                }, onError: { error in
+                    errorMessage = error.localizedDescription
+                    stopListening()
+                })
                 isListening = true
+                warnIfSilent()
             } catch {
                 errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    /// Hinweis, falls nach einigen Sekunden noch nichts erkannt wurde, statt stumm zu bleiben.
+    private func warnIfSilent() {
+        Task {
+            try? await Task.sleep(for: .seconds(6))
+            if isListening, transcript.isEmpty, errorMessage == nil {
+                errorMessage = "Noch nichts verstanden. Sprich etwas lauter oder prüfe den Mikrofon-Eingang."
             }
         }
     }
