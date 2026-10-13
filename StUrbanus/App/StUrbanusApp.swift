@@ -7,7 +7,7 @@ struct StUrbanusApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: [Course.self, Hole.self, Round.self, HoleScore.self, Shot.self])
+        .modelContainer(AppModel.container)
     }
 }
 

@@ -43,13 +43,7 @@ struct RoundsView: View {
 
     private func startRound() {
         guard let course = courses.first else { return }
-        let round = Round(course: course)
-        context.insert(round)
-        for hole in course.sortedHoles {
-            round.holeScores.append(HoleScore(holeNumber: hole.number, par: hole.par))
-        }
-        try? context.save()
-        path.append(round)
+        path.append(RoundService.startRound(on: course, in: context))
     }
 
     private func delete(at offsets: IndexSet) {
@@ -68,7 +62,9 @@ private struct RoundRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(round.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.headline)
-                Text("\(round.playedScores.count) von \(round.holeScores.count) Löchern")
+                Text(round.isFinished
+                     ? "\(round.playedScores.count) von \(round.holeScores.count) Löchern"
+                     : "Läuft · Loch \(round.currentHole)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }

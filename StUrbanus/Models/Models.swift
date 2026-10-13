@@ -32,6 +32,10 @@ final class Hole {
 final class Round {
     var date: Date = Date()
     var courseName: String = ""
+    /// Loch, auf dem gerade gespielt wird; geteilt zwischen App und Siri.
+    var currentHole: Int = 1
+    /// Beendete Runden sind nicht mehr „aktiv“ für Siri.
+    var isFinished: Bool = false
     var course: Course?
     @Relationship(deleteRule: .cascade, inverse: \HoleScore.round)
     var holeScores: [HoleScore] = []
@@ -43,6 +47,7 @@ final class Round {
     }
 
     var sortedScores: [HoleScore] { holeScores.sorted { $0.holeNumber < $1.holeNumber } }
+    var currentScore: HoleScore? { holeScores.first { $0.holeNumber == currentHole } }
     var playedScores: [HoleScore] { holeScores.filter { !$0.shots.isEmpty } }
     var totalStrokes: Int { playedScores.reduce(0) { $0 + $1.strokes } }
     var parOfPlayedHoles: Int { playedScores.reduce(0) { $0 + $1.par } }

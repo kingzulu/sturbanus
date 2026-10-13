@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		1C8FC6243DFA9744D954ADBA /* StUrbanusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC2222450DEED02C70D1F3F /* StUrbanusApp.swift */; };
 		2180A5FF532FE2D74986BB17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05765A34E9B0CCD84EA6EDF3 /* Assets.xcassets */; };
+		22415B14D9ECFE748A326EE0 /* RoundServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E147F6A017035D924B8BA86C /* RoundServiceTests.swift */; };
 		24E1368891B3EC1CC879FB29 /* RoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99DA791F7557BC40686B3AE /* RoundsView.swift */; };
+		2724B5AEC858D3BC849514BE /* RoundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D50211945FA1CD53B88C88B /* RoundService.swift */; };
 		5FDE6C36A2F880BDED949750 /* ShotPhraseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */; };
 		66C4A625BCAD9D8813A79C50 /* RoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC3921713C3F7EE3970EF49 /* RoundView.swift */; };
 		77CCB6291BF6E5E8190135ED /* ShotEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A89081164E2344228B7EBEC /* ShotEnums.swift */; };
 		79506B358490BB6E92F5169D /* SeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 080E79CBBD467936E6D952DE /* SeedData.swift */; };
+		7D6E92874D0847B0FFB29636 /* RoundIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75067A0A07D77AE4718005EF /* RoundIntents.swift */; };
 		8968EEBEA1A775D4765FD358 /* StatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4927BB454B3744067D3AF8 /* StatsView.swift */; };
 		94A06A239B04EA1B448D26AD /* CourseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CF969ADB4D8214F80D9E27 /* CourseView.swift */; };
 		96567A4EE748376B303E8A54 /* ShotEntryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49108CD2493245B25B58A41A /* ShotEntryPanel.swift */; };
@@ -21,6 +24,7 @@
 		B082E7004575DF9B7523C541 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C95D9D97779BA77B09A39C /* Models.swift */; };
 		CB96AAEEE948F3DF674AF22E /* VoiceShotSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */; };
 		DCF9A73B21A3B44ED62CFE3C /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */; };
+		E68088497985437C02028033 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F72B417A9D4C17F575A58F /* AppModel.swift */; };
 		EFF80C3DDADD79BA731F0CDC /* AppleSpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC8A2619FD86C923642DD3A /* AppleSpeechRecognizer.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,10 +41,13 @@
 /* Begin PBXFileReference section */
 		05765A34E9B0CCD84EA6EDF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		080E79CBBD467936E6D952DE /* SeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedData.swift; sourceTree = "<group>"; };
+		0D50211945FA1CD53B88C88B /* RoundService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundService.swift; sourceTree = "<group>"; };
 		1A89081164E2344228B7EBEC /* ShotEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEnums.swift; sourceTree = "<group>"; };
 		4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceShotSheet.swift; sourceTree = "<group>"; };
+		44F72B417A9D4C17F575A58F /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		49108CD2493245B25B58A41A /* ShotEntryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEntryPanel.swift; sourceTree = "<group>"; };
 		548647FB369FD84AE1FDC608 /* StUrbanusTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = StUrbanusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75067A0A07D77AE4718005EF /* RoundIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundIntents.swift; sourceTree = "<group>"; };
 		8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		99C95D9D97779BA77B09A39C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPhraseParser.swift; sourceTree = "<group>"; };
@@ -50,6 +57,7 @@
 		D19AE34536D400A1C9CE6B8D /* StUrbanus.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = StUrbanus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D99DA791F7557BC40686B3AE /* RoundsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundsView.swift; sourceTree = "<group>"; };
 		DCC3921713C3F7EE3970EF49 /* RoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundView.swift; sourceTree = "<group>"; };
+		E147F6A017035D924B8BA86C /* RoundServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundServiceTests.swift; sourceTree = "<group>"; };
 		EF4927BB454B3744067D3AF8 /* StatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsView.swift; sourceTree = "<group>"; };
 		F8CF969ADB4D8214F80D9E27 /* CourseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,7 +75,9 @@
 		29FB442B52BC17BB38ECEE42 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				44F72B417A9D4C17F575A58F /* AppModel.swift */,
 				99C95D9D97779BA77B09A39C /* Models.swift */,
+				0D50211945FA1CD53B88C88B /* RoundService.swift */,
 				080E79CBBD467936E6D952DE /* SeedData.swift */,
 				1A89081164E2344228B7EBEC /* ShotEnums.swift */,
 			);
@@ -84,10 +94,19 @@
 			path = Speech;
 			sourceTree = "<group>";
 		};
+		9343960885CED4893BCD7E3E /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				75067A0A07D77AE4718005EF /* RoundIntents.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
 		979C437C871386A7F9D47873 /* StUrbanus */ = {
 			isa = PBXGroup;
 			children = (
 				9C669D205B1F861043DFB4BA /* App */,
+				9343960885CED4893BCD7E3E /* Intents */,
 				29FB442B52BC17BB38ECEE42 /* Models */,
 				B2C13CFF3DE7988941EECF08 /* Resources */,
 				36FC120593BA1A9A838856B5 /* Speech */,
@@ -129,6 +148,7 @@
 		AFC019C9D9DE1EADDBC18B97 /* StUrbanusTests */ = {
 			isa = PBXGroup;
 			children = (
+				E147F6A017035D924B8BA86C /* RoundServiceTests.swift */,
 				CBD7B377B9F466BC098DD5B8 /* ShotPhraseParserTests.swift */,
 			);
 			path = StUrbanusTests;
@@ -236,9 +256,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E68088497985437C02028033 /* AppModel.swift in Sources */,
 				EFF80C3DDADD79BA731F0CDC /* AppleSpeechRecognizer.swift in Sources */,
 				94A06A239B04EA1B448D26AD /* CourseView.swift in Sources */,
 				B082E7004575DF9B7523C541 /* Models.swift in Sources */,
+				7D6E92874D0847B0FFB29636 /* RoundIntents.swift in Sources */,
+				2724B5AEC858D3BC849514BE /* RoundService.swift in Sources */,
 				66C4A625BCAD9D8813A79C50 /* RoundView.swift in Sources */,
 				24E1368891B3EC1CC879FB29 /* RoundsView.swift in Sources */,
 				79506B358490BB6E92F5169D /* SeedData.swift in Sources */,
@@ -256,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22415B14D9ECFE748A326EE0 /* RoundServiceTests.swift in Sources */,
 				AC7D5F557BB8DEEEC008E2AC /* ShotPhraseParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -363,7 +387,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "St. Urbanus";
+				INFOPLIST_KEY_CFBundleDisplayName = Urbanus;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -405,7 +429,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "St. Urbanus";
+				INFOPLIST_KEY_CFBundleDisplayName = Urbanus;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

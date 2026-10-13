@@ -109,4 +109,51 @@ struct ShotPhraseParserTests {
         #expect(command == .save)
         #expect(shot == ParsedShot())
     }
+
+    // MARK: Rundenbefehle
+
+    @Test(arguments: [
+        ("nächstes Loch", RoundCommand.nextHole),
+        ("Das nächste Loch", .nextHole),
+        ("vorheriges Loch", .previousHole),
+        ("letztes Loch", .previousHole),
+        ("Loch 7", .goToHole(7)),
+        ("Loch sieben", .goToHole(7)),
+        ("Loch Nummer 12", .goToHole(12)),
+        ("letzten Schlag löschen", .undoLastShot),
+        ("rückgängig", .undoLastShot),
+        ("Wie steht's?", .score),
+        ("Spielstand", .score),
+        ("Runde beenden", .endRound),
+        ("Runde fertig", .endRound),
+    ])
+    func roundCommand(_ phrase: String, _ expected: RoundCommand) {
+        let utterance = ShotPhraseParser.parseRoundUtterance(phrase)
+        #expect(utterance.roundCommand == expected)
+        #expect(utterance.shot == ParsedShot())
+        #expect(utterance.command == nil)
+    }
+
+    @Test func shotThenNextHole() {
+        let utterance = ShotPhraseParser.parseRoundUtterance("Putt drin, nächstes Loch")
+        #expect(utterance.roundCommand == .nextHole)
+        #expect(utterance.shot == ParsedShot(shotType: .putt, result: .good, consequence: nil))
+    }
+
+    @Test func holeThenShot() {
+        let utterance = ShotPhraseParser.parseRoundUtterance("Loch 3, Drive links fertig")
+        #expect(utterance.roundCommand == .goToHole(3))
+        #expect(utterance.command == .save)
+        #expect(utterance.shot == ParsedShot(shotType: .drive, result: .left, consequence: nil))
+    }
+
+    @Test func invalidHoleNumberIsIgnored() {
+        #expect(ShotPhraseParser.parseRoundUtterance("Loch 19").roundCommand == nil)
+    }
+
+    @Test func plainShotHasNoRoundCommand() {
+        let utterance = ShotPhraseParser.parseRoundUtterance("Siebener Eisen rechts ins Wasser")
+        #expect(utterance.roundCommand == nil)
+        #expect(utterance.shot == ParsedShot(shotType: .shortIronWedge, result: .right, consequence: .water))
+    }
 }

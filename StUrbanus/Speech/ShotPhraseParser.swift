@@ -18,23 +18,92 @@ enum VoiceCommand: Equatable, Sendable {
     case cancel
 }
 
+/// Befehle zur Steuerung der Runde („nächstes Loch“, „Loch 7“, …).
+enum RoundCommand: Equatable, Sendable {
+    case nextHole
+    case previousHole
+    case goToHole(Int)
+    case undoLastShot
+    case score
+    case endRound
+}
+
+/// Eine vollständige Ansage: Schlag, optionaler Befehl am Ende und optionaler Rundenbefehl.
+struct RoundUtterance: Equatable, Sendable {
+    var shot = ParsedShot()
+    var command: VoiceCommand?
+    var roundCommand: RoundCommand?
+}
+
 /// Bildet deutsche Ansagen wie „Siebener Eisen rechts ins Wasser“ auf Schlagart,
 /// Ergebnis und Folge ab. Rein schlüsselwortbasiert, ohne Netz.
 enum ShotPhraseParser {
     /// Wie `parse`, erkennt aber zusätzlich einen Befehl als letztes Wort
     /// („… rechts fertig“) und wertet die Ansage ohne dieses Wort aus.
     static func parseUtterance(_ phrase: String) -> (shot: ParsedShot, command: VoiceCommand?) {
-        var words = normalize(phrase).split(separator: " ").map(String.init)
-        guard let last = words.last else { return (ParsedShot(), nil) }
+        let (rest, command) = splitTrailingCommand(normalize(phrase))
+        return (parse(rest), command)
+    }
 
+    /// Erkennt zusätzlich Rundenbefehle wie „Putt drin, nächstes Loch“ oder „Loch 7, Drive rechts“.
+    static func parseRoundUtterance(_ phrase: String) -> RoundUtterance {
+        var text = " " + normalize(phrase) + " "
+        var roundCommand: RoundCommand?
+
+        for (command, pattern) in roundCommandRules {
+            if let range = text.range(of: pattern, options: .regularExpression) {
+                roundCommand = command
+                text.replaceSubrange(range, with: " ")
+                break
+            }
+        }
+        if roundCommand == nil, let (hole, range) = holeNumber(in: text) {
+            roundCommand = .goToHole(hole)
+            text.replaceSubrange(range, with: " ")
+        }
+
+        let (rest, command) = splitTrailingCommand(normalize(text))
+        return RoundUtterance(shot: parse(rest), command: command, roundCommand: roundCommand)
+    }
+
+    private static func splitTrailingCommand(_ normalized: String) -> (rest: String, command: VoiceCommand?) {
+        var words = normalized.split(separator: " ").map(String.init)
         let command: VoiceCommand?
-        switch last {
+        switch words.last {
         case "fertig", "speichern", "eintragen": command = .save
         case "abbrechen", "verwerfen": command = .cancel
         default: command = nil
         }
         if command != nil { words.removeLast() }
-        return (parse(words.joined(separator: " ")), command)
+        return (words.joined(separator: " "), command)
+    }
+
+    // Reihenfolge zählt: „Runde fertig“ vor dem Speichern-Befehl „fertig“.
+    private static let roundCommandRules: [(RoundCommand, String)] = [
+        (.endRound, #" runde (beenden|fertig|zu ende|abschliessen|vorbei) "#),
+        (.nextHole, #" (das )?nachste[snmr]? loch "#),
+        (.previousHole, #" (vorherige[snmr]?|letzte[snmr]?) loch "#),
+        (.previousHole, #" loch zuruck "#),
+        (.undoLastShot, #" (den )?(letzte[nr]? )?schlag (loschen|streichen|entfernen) "#),
+        (.undoLastShot, #" (ruckgangig|loschen) "#),
+        (.score, #" (spielstand|zwischenstand|score|wie steht( s| es)?) "#),
+    ]
+
+    private static let holeWords = [
+        "eins": 1, "zwei": 2, "drei": 3, "vier": 4, "funf": 5, "sechs": 6, "sieben": 7, "acht": 8, "neun": 9,
+        "zehn": 10, "elf": 11, "zwolf": 12, "dreizehn": 13, "vierzehn": 14, "funfzehn": 15, "sechzehn": 16,
+        "siebzehn": 17, "achtzehn": 18,
+    ]
+
+    /// „Loch 7“, „Loch sieben“, „Loch Nummer 12“ → Lochnummer 1…18.
+    private static func holeNumber(in text: String) -> (Int, Range<String.Index>)? {
+        guard let range = text.range(of: #" loch (nummer )?([0-9]{1,2}|[a-z]+) "#, options: .regularExpression) else {
+            return nil
+        }
+        guard let token = text[range].split(separator: " ").last.map(String.init) else { return nil }
+        let number = Int(token) ?? holeWords[token]
+        guard let number, (1...18).contains(number) else { return nil }
+        return (number, range)
     }
 
     static func parse(_ phrase: String) -> ParsedShot {

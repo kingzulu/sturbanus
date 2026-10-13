@@ -6,6 +6,8 @@ import SwiftUI
 struct VoiceShotSheet: View {
     let recognizer: any SpeechRecognizer
     let onSave: (ShotType, ShotResult, ShotConsequence?) -> Void
+    /// Rundenbefehle aus der Ansage („nächstes Loch“, „Loch 7“, …).
+    var onRoundCommand: (RoundCommand) -> Void = { _ in }
 
     /// Stille nach erkanntem Text, nach der automatisch beendet und gespeichert wird.
     private static let silenceTimeout: Duration = .seconds(2)
@@ -16,13 +18,14 @@ struct VoiceShotSheet: View {
     @State private var errorMessage: String?
     @State private var parsed = ParsedShot()
     @State private var showMissing = false
+    @State private var pendingRoundCommand: RoundCommand?
     @State private var silenceTask: Task<Void, Never>?
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Beispiel: „Siebener Eisen rechts ins Wasser, fertig“")
+                    Text("Beispiel: „Siebener Eisen rechts ins Wasser, fertig“ oder „Putt drin, nächstes Loch“")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
 
@@ -118,10 +121,11 @@ struct VoiceShotSheet: View {
     private func handleTranscript(_ text: String) {
         guard isListening else { return }
         transcript = text
-        let (shot, command) = ShotPhraseParser.parseUtterance(text)
-        parsed = shot
+        let utterance = ShotPhraseParser.parseRoundUtterance(text)
+        parsed = utterance.shot
+        pendingRoundCommand = utterance.roundCommand
 
-        switch command {
+        switch utterance.command {
         case .cancel:
             cancel()
         case .save:
@@ -154,7 +158,29 @@ struct VoiceShotSheet: View {
     /// Aufnahme beenden und speichern, sofern Schlagart und Ergebnis erkannt sind.
     private func finishListening() {
         stopListening()
-        trySave()
+        if let command = pendingRoundCommand {
+            complete(with: command)
+        } else {
+            trySave()
+        }
+    }
+
+    /// Mit Rundenbefehl: Schlag nur speichern, wenn vollständig, dann Befehl ausführen und schließen.
+    /// Bei „Loch 7, Drive rechts“ erst wechseln, damit der Schlag auf Loch 7 landet.
+    private func complete(with command: RoundCommand) {
+        if case .goToHole = command {
+            onRoundCommand(command)
+            saveIfComplete()
+        } else {
+            saveIfComplete()
+            onRoundCommand(command)
+        }
+        dismiss()
+    }
+
+    private func saveIfComplete() {
+        guard let type = parsed.shotType, let result = parsed.result else { return }
+        onSave(type, result, parsed.consequence)
     }
 
     private func trySave() {

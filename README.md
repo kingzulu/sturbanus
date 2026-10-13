@@ -12,6 +12,18 @@ SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfa
 
 Sprach-Erfassung: Ansage mit „fertig“ oder „speichern“ beenden (oder 2 s schweigen), dann wird gespeichert, sofern Schlagart und Ergebnis erkannt sind. „abbrechen“ verwirft. Fehlt etwas, bleibt die Ansicht offen und markiert das Feld.
 
+## Freihändig mit Siri (iPhone kann im Bag bleiben)
+
+Runde in der App starten, danach per „Hey Siri“ (auch über AirPods, auch bei gesperrtem iPhone):
+
+- „Urbanus Schlag“ → Siri fragt „Welcher Schlag?“ → „Drive rechts ins Aus“ (oder „Putt drin, nächstes Loch“)
+- „Urbanus nächstes Loch“ / „Urbanus vorheriges Loch“
+- „Urbanus letzten Schlag löschen“
+- „Urbanus Spielstand“
+- „Urbanus Runde beenden“
+
+Siri antwortet gesprochen, z. B. „Drive, Rechts, Aus. Schlag 1 auf Loch 1.“ Das aktuelle Loch wird in der Runde gespeichert, App und Siri bleiben synchron.
+
 Score eines Lochs = erfasste Schläge + Strafschläge (Aus, Wasser und Strafschlag zählen je +1).
 
 ## Projekt neu erzeugen

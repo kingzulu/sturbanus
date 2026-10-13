@@ -4,17 +4,15 @@ import SwiftUI
 /// Eine Runde: Loch wählen, Schläge erfassen. Score des Lochs = Schläge + Strafschläge.
 struct RoundView: View {
     @Environment(\.modelContext) private var context
-    let round: Round
-    @State private var selectedHole = 1
+    /// Das aktuelle Loch liegt in der Runde selbst, damit Siri („nächstes Loch“) und App synchron bleiben.
+    @Bindable var round: Round
     @State private var showVoice = false
 
-    private var currentScore: HoleScore? {
-        round.holeScores.first { $0.holeNumber == selectedHole }
-    }
+    private var currentScore: HoleScore? { round.currentScore }
 
     var body: some View {
         VStack(spacing: 0) {
-            HolePicker(round: round, selectedHole: $selectedHole)
+            HolePicker(round: round, selectedHole: $round.currentHole)
                 .padding(.vertical, 8)
 
             Divider()
@@ -25,14 +23,14 @@ struct RoundView: View {
                         HoleHeader(score: score)
                         ShotList(score: score, onDelete: deleteShot)
                         ShotEntryPanel { type, result, consequence in
-                            addShot(to: score, type: type, result: result, consequence: consequence)
+                            RoundService.logShot(type, result, consequence, in: round, context: context)
                         }
                     }
                     .padding()
                 }
             }
         }
-        .navigationTitle("Loch \(selectedHole)")
+        .navigationTitle("Loch \(round.currentHole)")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -46,14 +44,14 @@ struct RoundView: View {
         // Eigene Leiste statt Toolbar-.bottomBar, die von der TabBar verdeckt wird.
         .safeAreaInset(edge: .bottom) {
             HStack {
-                Button("Vorheriges", systemImage: "chevron.left") { selectedHole = max(1, selectedHole - 1) }
-                    .disabled(selectedHole <= 1)
+                Button("Vorheriges", systemImage: "chevron.left") { goTo(round.currentHole - 1) }
+                    .disabled(round.currentHole <= 1)
                 Spacer()
                 Text("Gesamt \(round.totalStrokes) (\(ToPar.format(round.toPar)))")
                     .font(.subheadline.monospacedDigit())
                 Spacer()
-                Button("Nächstes", systemImage: "chevron.right") { selectedHole = min(round.holeScores.count, selectedHole + 1) }
-                    .disabled(selectedHole >= round.holeScores.count)
+                Button("Nächstes", systemImage: "chevron.right") { goTo(round.currentHole + 1) }
+                    .disabled(round.currentHole >= round.holeScores.count)
             }
             .labelStyle(.iconOnly)
             .font(.title3)
@@ -62,17 +60,17 @@ struct RoundView: View {
             .background(.bar)
         }
         .sheet(isPresented: $showVoice) {
-            VoiceShotSheet(recognizer: AppleSpeechRecognizer()) { type, result, consequence in
-                if let score = currentScore {
-                    addShot(to: score, type: type, result: result, consequence: consequence)
-                }
-            }
+            VoiceShotSheet(recognizer: AppleSpeechRecognizer(), onSave: { type, result, consequence in
+                RoundService.logShot(type, result, consequence, in: round, context: context)
+            }, onRoundCommand: { command in
+                _ = RoundService.apply(command, to: round, in: context)
+            })
         }
     }
 
-    private func addShot(to score: HoleScore, type: ShotType, result: ShotResult, consequence: ShotConsequence?) {
-        let nextIndex = (score.shots.map(\.index).max() ?? 0) + 1
-        score.shots.append(Shot(index: nextIndex, type: type, result: result, consequence: consequence))
+    private func goTo(_ hole: Int) {
+        guard (1...round.holeScores.count).contains(hole) else { return }
+        round.currentHole = hole
         try? context.save()
     }
 
