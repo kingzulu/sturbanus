@@ -99,6 +99,18 @@ enum RoundService {
 
         let parts = [type.spokenLabel, result.label, consequence?.label].compactMap { $0 }
         var reply = "\(parts.joined(separator: ", ")). Schlag \(index) auf Loch \(score.holeNumber)."
+        if consequence == .holed {
+            let relative = score.strokes - score.par
+            let word = switch relative {
+            case 0: "Par"
+            case -1: "Birdie"
+            case -2: "Eagle"
+            case 1: "Bogey"
+            case 2: "Doppel-Bogey"
+            default: relative > 0 ? "\(relative) über Par" : "\(-relative) unter Par"
+            }
+            reply += " Loch \(score.holeNumber) beendet mit \(score.strokes), \(word)."
+        }
         if girBefore == nil, let girNow = score.gir {
             reply += girNow ? " Grün in Regulation." : " Grün in Regulation verfehlt."
         } else if score.gir == nil, index == score.girShotNumber {

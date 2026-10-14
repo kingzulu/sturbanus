@@ -66,19 +66,19 @@ struct VoiceShotSheet: View {
 
                     Divider()
 
-                    fieldHeader("Schlagart", missing: showMissing && parsed.shotType == nil)
+                    fieldHeader("Schlagart:", missing: showMissing && parsed.shotType == nil)
                     BigButtonGrid(items: ShotType.selectable, label: \.label, selected: parsed.shotType, tint: .gray) {
                         parsed.shotType = $0
                     }
-                    fieldHeader("Ergebnis", missing: showMissing && parsed.result == nil)
+                    fieldHeader("Ergebnis:", missing: showMissing && parsed.result == nil)
                     BigButtonGrid(items: ShotResult.allCases, label: \.label, selected: parsed.result, tint: .gray) {
                         parsed.result = $0
                     }
-                    fieldHeader("Folge (optional)", missing: false)
+                    fieldHeader("Folge:", missing: false)
                     BigButtonGrid(items: ShotConsequence.allCases, label: \.label, selected: parsed.consequence, tint: .gray) {
                         parsed.consequence = (parsed.consequence == $0) ? nil : $0
                     }
-                    fieldHeader("Green in Regulation (optional)", missing: false)
+                    fieldHeader("Green in Regulation:", missing: false)
                     Picker("GIR", selection: $parsed.gir) {
                         Text("–").tag(Bool?.none)
                         Text("Getroffen").tag(Bool?.some(true))

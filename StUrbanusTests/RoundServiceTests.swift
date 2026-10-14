@@ -139,4 +139,33 @@ struct RoundServiceTests {
         #expect(round.currentScore?.shots.count == 2)
         #expect(round.currentScore?.gir == true)
     }
+
+    // MARK: Eingelocht
+
+    @Test func holingOutFinishesHoleAndAnnouncesScore() {
+        round.currentHole = 3 // Par 3
+        _ = RoundService.handleVoice("Eisen 7 aufs Grün", in: context)
+        let reply = RoundService.handleVoice("Putt drin", in: context)
+        #expect(reply == "Putt, Gut, Eingelocht. Schlag 2 auf Loch 3. Loch 3 beendet mit 2, Birdie.")
+        #expect(round.currentScore?.isHoled == true)
+        #expect(round.currentHole == 3) // kein automatischer Lochwechsel
+    }
+
+    @Test func chipInAfterMissedGreenIsNoGIR() {
+        round.currentHole = 2 // Par 4
+        _ = RoundService.handleVoice("Drive Fairway", in: context)
+        _ = RoundService.handleVoice("Eisen 8 rechts ins Rough", in: context)
+        let reply = RoundService.handleVoice("Chip eingelocht", in: context)
+        #expect(reply.hasSuffix("Loch 2 beendet mit 3, Birdie."))
+        #expect(round.currentScore?.gir == false)
+        #expect(round.currentScore?.strokes == 3)
+    }
+
+    @Test func holeOutOnGIRShotCountsAsGIR() {
+        round.currentHole = 2 // Par 4
+        _ = RoundService.handleVoice("Drive gut", in: context)
+        _ = RoundService.handleVoice("Wedge eingelocht", in: context)
+        #expect(round.currentScore?.gir == true)
+        #expect(round.currentScore?.isHoled == true)
+    }
 }

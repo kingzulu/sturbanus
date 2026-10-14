@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Erfassung per Tipp in drei Schritten: Schlagart → Ergebnis → optionale Folge.
+/// Erfassung per Tipp in drei Schritten: Schlagart → Ergebnis → optionale Folge (inkl. „Eingelocht“).
 /// Beim GIR-Schlag (Par−2) wird in Schritt 3 ausdrücklich gefragt, ob das Grün getroffen wurde.
 struct ShotEntryPanel: View {
     /// Ist der nächste Schlag der GIR-Schlag dieses Lochs?
@@ -13,11 +13,14 @@ struct ShotEntryPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let shotType, let result {
-                stepHeader(isGIRShot ? "3. Folge · GIR-Schlag" : "3. Folge (optional)", summary: "\(shotType.label) · \(result.label)")
+                stepHeader(isGIRShot ? "Folge (GIR-Schlag):" : "Folge:", summary: "\(shotType.label) · \(result.label)")
+                BigButton(title: "Eingelocht", systemImage: "flag.checkered", tint: .green) {
+                    save(shotType, result, .holed, gir: nil)
+                }
                 if isGIRShot {
                     girQuestion(shotType, result)
                 }
-                BigButtonGrid(items: ShotConsequence.allCases.filter { !isGIRShot || $0 != .green },
+                BigButtonGrid(items: ShotConsequence.allCases.filter { $0 != .holed && (!isGIRShot || $0 != .green) },
                               label: \.label, tint: .red) { consequence in
                     save(shotType, result, consequence, gir: nil)
                 }
@@ -27,10 +30,10 @@ struct ShotEntryPanel: View {
                     }
                 }
             } else if let shotType {
-                stepHeader("2. Ergebnis", summary: shotType.label)
+                stepHeader("Ergebnis:", summary: shotType.label)
                 BigButtonGrid(items: ShotResult.allCases, label: \.label, symbol: \.symbol, tint: .orange) { result = $0 }
             } else {
-                stepHeader("1. Schlagart", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
+                stepHeader("Schlagart:", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
                 BigButtonGrid(items: ShotType.selectable, label: \.label, symbol: \.symbol, tint: .accentColor) { shotType = $0 }
             }
         }

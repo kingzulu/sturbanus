@@ -24,8 +24,15 @@ struct RoundView: View {
                             RoundService.setGIR(gir, in: round, context: context)
                         }
                         ShotList(score: score, onDelete: deleteShot)
-                        ShotEntryPanel(isGIRShot: isNextShotGIRShot(score)) { type, result, consequence, gir in
-                            RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
+                        if score.isHoled {
+                            HoleFinished(score: score,
+                                         nextHole: score.holeNumber < round.holeScores.count ? score.holeNumber + 1 : nil) {
+                                goTo(score.holeNumber + 1)
+                            }
+                        } else {
+                            ShotEntryPanel(isGIRShot: isNextShotGIRShot(score)) { type, result, consequence, gir in
+                                RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
+                            }
                         }
                     }
                     .padding()
@@ -101,8 +108,13 @@ private struct HolePicker: View {
                         } label: {
                             VStack(spacing: 2) {
                                 Text("\(score.holeNumber)").font(.headline)
-                                Text(score.shots.isEmpty ? "–" : "\(score.strokes)")
-                                    .font(.caption.monospacedDigit())
+                                HStack(spacing: 1) {
+                                    Text(score.shots.isEmpty ? "–" : "\(score.strokes)")
+                                    if score.isHoled {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                                .font(.caption.monospacedDigit())
                             }
                             .frame(width: 44, height: 48)
                             .background(score.holeNumber == selectedHole ? Color.accentColor : Color(.secondarySystemBackground),
@@ -240,5 +252,30 @@ private struct GIRBadge: View {
         case false?: .orange
         case nil: .secondary
         }
+    }
+}
+
+/// Loch ist eingelocht: Ergebnis anzeigen statt weiterer Erfassung.
+private struct HoleFinished: View {
+    let score: HoleScore
+    let nextHole: Int?
+    let onNext: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Eingelocht mit \(score.strokes) (\(ToPar.format(score.strokes - score.par)))",
+                  systemImage: "flag.checkered")
+                .font(.title3.bold())
+                .foregroundStyle(.green)
+            Text("Zum Korrigieren den letzten Schlag oben löschen.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            if let nextHole {
+                BigButton(title: "Weiter zu Loch \(nextHole)", systemImage: "chevron.right.circle.fill", tint: .accentColor, action: onNext)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.green.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
     }
 }

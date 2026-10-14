@@ -27,6 +27,7 @@ Siri antwortet gesprochen, z. B. „Drive, Rechts, Aus. Schlag 1 auf Loch 1.“ 
 ## Schläger, Folge und GIR
 
 - Schlagart: Drive, Holz/Hybrid, Eisen 5–9 einzeln, Wedge, Pitch, Chip, Bunker, Putt (per Sprache z. B. „Eisen 7“, „7er Eisen“, „Siebener“).
+- Eingelocht: eigener Knopf im Schritt „Folge:“ (per Sprache „eingelocht“, „versenkt“, „drin“). Das Loch ist damit beendet und zeigt sein Ergebnis; zum nächsten Loch geht es per Knopf oder „nächstes Loch“.
 - Folge (wo der Ball liegt): Fairway, First Cut, Grün, Rough, Bunker, Wasser, Aus, Strafschlag. „Drive Fairway“ oder „Eisen 9 aufs Grün“ zählen ohne Richtungsangabe als gut.
 - Green in Regulation: Der GIR-Schlag ist Schlag Par−2 (Par 3: 1., Par 4: 2., Par 5: 3.). Dort fragt die App ausdrücklich „Grün getroffen?“. GIR ergibt sich sonst aus den Schlägen (Folge „Grün“ spätestens beim GIR-Schlag oder direkt danach geputtet) und lässt sich per „GIR ja/nein“, „Grün getroffen/verfehlt“ oder über das GIR-Feld am Loch korrigieren. Die Statistik zeigt die GIR-Quote gesamt und je Par 3/4/5.
 

@@ -151,8 +151,8 @@ enum ShotPhraseParser {
         if parsed.gir == true, parsed.consequence == nil {
             parsed.consequence = .green
         }
-        // „Drive Fairway“ / „Eisen 9 aufs Grün“: ohne Richtungsangabe gilt der Schlag als gut.
-        if parsed.result == nil, parsed.consequence == .fairway || parsed.consequence == .green {
+        // „Drive Fairway“ / „Eisen 9 aufs Grün“ / „Putt drin“: ohne Richtungsangabe gilt der Schlag als gut.
+        if parsed.result == nil, [.fairway, .green, .holed].contains(parsed.consequence) {
             parsed.result = .good
         }
         return parsed
@@ -201,14 +201,14 @@ enum ShotPhraseParser {
         (.long, [#"\bzu lang\b"#, #"\bzu weit\b"#, #"\blang\b"#, #"\bdruber\b"#]),
         (.left, [#"\b(nach )?links\b"#, #"\bhook\b"#, #"\bpull\b"#]),
         (.right, [#"\b(nach )?rechts\b"#, #"\bslice\b"#, #"\bpush\b"#]),
-        (.good, [#"\bgut\b"#, #"\bgerade\b"#, #"\bperfekt\b"#, #"\bsuper\b"#, #"\bsauber\b"#, #"\bok(ay)?\b"#,
-                 #"\beingelocht\b"#, #"\bdrin\b"#]),
+        (.good, [#"\bgut\b"#, #"\bgerade\b"#, #"\bperfekt\b"#, #"\bsuper\b"#, #"\bsauber\b"#, #"\bok(ay)?\b"#]),
     ]
 
     static let consequenceRules: [(ShotConsequence, [String])] = [
         (.penalty, [#"\bstraf ?schlag\b"#, #"\bstrafe\b"#, #"\bpenalty\b"#]),
         (.outOfBounds, [#"\b(ins|im) aus\b"#, #"\bout( of bounds)?\b"#, #"\bausgrenze\b"#, #"\baus\s*$"#, #"\baus\b"#]),
         (.water, [#"\bwasser\w*\b"#, #"\bteich\b"#, #"\bsee\b"#, #"\bbach\b"#]),
+        (.holed, [#"\beingelocht\b"#, #"\bdrin\b"#, #"\bim loch\b"#, #"\bversenkt\b"#]),
         (.green, [#"\b((aufs|auf das|auf dem|aufm|ins|im) )?grun\b"#]),
         (.fairway, [#"\b((aufs|auf das|auf dem|aufm|ins|im) )?fairway\b"#]),
         // Vor „Rough“, damit „Semi-Rough“ als First Cut zählt.

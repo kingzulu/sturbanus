@@ -99,11 +99,14 @@ enum ShotConsequence: String, Codable, CaseIterable, Identifiable, Sendable {
     case water
     case outOfBounds
     case penalty
+    /// Ball ist im Loch; das Loch ist damit beendet.
+    case holed
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
+        case .holed: "Eingelocht"
         case .fairway: "Fairway"
         case .firstCut: "First Cut"
         case .green: "Grün"
@@ -119,7 +122,7 @@ enum ShotConsequence: String, Codable, CaseIterable, Identifiable, Sendable {
     var penaltyStrokes: Int {
         switch self {
         case .outOfBounds, .water, .penalty: 1
-        case .fairway, .firstCut, .green, .rough, .bunker: 0
+        case .fairway, .firstCut, .green, .rough, .bunker, .holed: 0
         }
     }
 }

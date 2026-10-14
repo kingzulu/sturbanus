@@ -43,7 +43,10 @@ struct ShotPhraseParserTests {
         Case(phrase: "Aus dem Bunker zu kurz", type: .bunker, result: .short, consequence: nil),
         Case(phrase: "Bunkerschlag zu lang", type: .bunker, result: .long, consequence: nil),
         Case(phrase: "Putt zu kurz", type: .putt, result: .short, consequence: nil),
-        Case(phrase: "Putt drin", type: .putt, result: .good, consequence: nil),
+        Case(phrase: "Putt drin", type: .putt, result: .good, consequence: .holed),
+        Case(phrase: "Putt versenkt", type: .putt, result: .good, consequence: .holed),
+        Case(phrase: "Chip eingelocht", type: .chip, result: .good, consequence: .holed),
+        Case(phrase: "Wedge zu kurz im Bunker drin", type: .wedge, result: .short, consequence: .bunker),
         Case(phrase: "Drive gut Strafschlag", type: .drive, result: .good, consequence: .penalty),
         Case(phrase: "Hybrid links, Teich", type: .woodHybrid, result: .left, consequence: .water),
         Case(phrase: "DRIVE RECHTS!", type: .drive, result: .right, consequence: nil),
@@ -147,7 +150,7 @@ struct ShotPhraseParserTests {
     @Test func shotThenNextHole() {
         let utterance = ShotPhraseParser.parseRoundUtterance("Putt drin, nächstes Loch")
         #expect(utterance.roundCommand == .nextHole)
-        #expect(utterance.shot == ParsedShot(shotType: .putt, result: .good, consequence: nil))
+        #expect(utterance.shot == ParsedShot(shotType: .putt, result: .good, consequence: .holed))
     }
 
     @Test func holeThenShot() {

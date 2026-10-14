@@ -72,6 +72,9 @@ final class HoleScore {
 
     var sortedShots: [Shot] { shots.sorted { $0.index < $1.index } }
 
+    /// Loch beendet: ein Schlag wurde als „Eingelocht“ erfasst.
+    var isHoled: Bool { shots.contains { $0.consequence == .holed } }
+
     /// Schlag, nach dem der Ball für Green in Regulation auf dem Grün sein muss (Par 3: 1, Par 4: 2, Par 5: 3).
     var girShotNumber: Int { max(1, par - 2) }
 
@@ -82,8 +85,10 @@ final class HoleScore {
     var derivedGIR: Bool? {
         let girShot = girShotNumber
         for shot in sortedShots {
-            if shot.consequence == .green { return shot.index <= girShot }
+            // Geputtet wird vom Grün: es wurde mit dem vorherigen Schlag erreicht.
             if shot.shotType == .putt { return shot.index - 1 <= girShot }
+            // Eingelocht zählt wie Grün getroffen (auch ein Chip-in).
+            if shot.consequence == .green || shot.consequence == .holed { return shot.index <= girShot }
             if shot.index > girShot { return false }
             if shot.index == girShot, shot.consequence != nil { return false }
         }
