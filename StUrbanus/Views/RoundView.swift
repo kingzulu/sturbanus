@@ -20,10 +20,12 @@ struct RoundView: View {
             if let score = currentScore {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        HoleHeader(score: score)
+                        HoleHeader(score: score) { gir in
+                            RoundService.setGIR(gir, in: round, context: context)
+                        }
                         ShotList(score: score, onDelete: deleteShot)
-                        ShotEntryPanel { type, result, consequence in
-                            RoundService.logShot(type, result, consequence, in: round, context: context)
+                        ShotEntryPanel(isGIRShot: isNextShotGIRShot(score)) { type, result, consequence, gir in
+                            RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
                         }
                     }
                     .padding()
@@ -60,12 +62,17 @@ struct RoundView: View {
             .background(.bar)
         }
         .sheet(isPresented: $showVoice) {
-            VoiceShotSheet(recognizer: AppleSpeechRecognizer(), onSave: { type, result, consequence in
-                RoundService.logShot(type, result, consequence, in: round, context: context)
+            VoiceShotSheet(recognizer: AppleSpeechRecognizer(), onSave: { type, result, consequence, gir in
+                RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
             }, onRoundCommand: { command in
                 _ = RoundService.apply(command, to: round, in: context)
             })
         }
+    }
+
+    /// Der nächste Schlag ist der GIR-Schlag (Par−2), solange GIR noch nicht feststeht.
+    private func isNextShotGIRShot(_ score: HoleScore) -> Bool {
+        score.gir == nil && (score.shots.map(\.index).max() ?? 0) + 1 == score.girShotNumber
     }
 
     private func goTo(_ hole: Int) {
@@ -116,6 +123,7 @@ private struct HolePicker: View {
 
 private struct HoleHeader: View {
     let score: HoleScore
+    let onSetGIR: (Bool?) -> Void
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -138,6 +146,7 @@ private struct HoleHeader: View {
                 .font(.title2.bold())
             }
             .tint(.primary)
+            GIRBadge(gir: score.gir, isManual: score.girOverride != nil, onSet: onSetGIR)
             Spacer()
             VStack(alignment: .trailing) {
                 Text("\(score.strokes)")
@@ -190,6 +199,46 @@ private struct ShotList: View {
                     .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 10))
                 }
             }
+        }
+    }
+}
+
+/// GIR-Status des Lochs; per Menü korrigierbar.
+private struct GIRBadge: View {
+    let gir: Bool?
+    let isManual: Bool
+    let onSet: (Bool?) -> Void
+
+    var body: some View {
+        Menu {
+            Button("Grün in Regulation getroffen", systemImage: "checkmark.circle") { onSet(true) }
+            Button("Grün in Regulation verfehlt", systemImage: "xmark.circle") { onSet(false) }
+            if isManual {
+                Button("Automatisch aus den Schlägen", systemImage: "arrow.counterclockwise") { onSet(nil) }
+            }
+        } label: {
+            Label("GIR", systemImage: symbol)
+                .font(.subheadline.bold())
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(color.opacity(0.15), in: Capsule())
+                .foregroundStyle(color)
+        }
+    }
+
+    private var symbol: String {
+        switch gir {
+        case true?: "checkmark.circle.fill"
+        case false?: "xmark.circle"
+        case nil: "questionmark.circle"
+        }
+    }
+
+    private var color: Color {
+        switch gir {
+        case true?: .green
+        case false?: .orange
+        case nil: .secondary
         }
     }
 }

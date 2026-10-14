@@ -5,6 +5,7 @@ import SwiftUI
 struct StatsView: View {
     @Query private var shots: [Shot]
     @Query private var rounds: [Round]
+    @Query private var holeScores: [HoleScore]
 
     var body: some View {
         NavigationStack {
@@ -19,6 +20,17 @@ struct StatsView: View {
                         LabeledContent("Erfasste Schläge", value: "\(shots.count)")
                         LabeledContent("Strafschläge", value: "\(shots.reduce(0) { $0 + ($1.consequence?.penaltyStrokes ?? 0) })")
                         LabeledContent("Gute Schläge", value: percent(shots.filter { $0.result == .good }.count, of: shots.count))
+                    }
+
+                    Section {
+                        GIRRow(title: "Gesamt", scores: holeScores)
+                        ForEach([3, 4, 5], id: \.self) { par in
+                            GIRRow(title: "Par \(par)", scores: holeScores.filter { $0.par == par })
+                        }
+                    } header: {
+                        Text("Green in Regulation")
+                    } footer: {
+                        Text("Grün spätestens mit Schlag Par−2 erreicht (Par 3: 1., Par 4: 2., Par 5: 3. Schlag).")
                     }
 
                     Section {
@@ -129,5 +141,24 @@ private struct Legend: View {
             }
         }
         .font(.caption2)
+    }
+}
+
+/// GIR-Quote über alle Löcher, bei denen GIR schon feststeht.
+private struct GIRRow: View {
+    let title: String
+    let scores: [HoleScore]
+
+    var body: some View {
+        let decided = scores.compactMap(\.gir)
+        let hits = decided.filter { $0 }.count
+        LabeledContent(title) {
+            if decided.isEmpty {
+                Text("–")
+            } else {
+                Text("\(percent(hits, of: decided.count))  (\(hits) von \(decided.count))")
+                    .monospacedDigit()
+            }
+        }
     }
 }

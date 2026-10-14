@@ -5,7 +5,7 @@ import SwiftUI
 /// Fehlt Schlagart oder Ergebnis, bleibt die Ansicht offen und markiert das fehlende Feld.
 struct VoiceShotSheet: View {
     let recognizer: any SpeechRecognizer
-    let onSave: (ShotType, ShotResult, ShotConsequence?) -> Void
+    let onSave: (ShotType, ShotResult, ShotConsequence?, Bool?) -> Void
     /// Rundenbefehle aus der Ansage („nächstes Loch“, „Loch 7“, …).
     var onRoundCommand: (RoundCommand) -> Void = { _ in }
 
@@ -67,7 +67,7 @@ struct VoiceShotSheet: View {
                     Divider()
 
                     fieldHeader("Schlagart", missing: showMissing && parsed.shotType == nil)
-                    BigButtonGrid(items: ShotType.allCases, label: \.label, selected: parsed.shotType, tint: .gray) {
+                    BigButtonGrid(items: ShotType.selectable, label: \.label, selected: parsed.shotType, tint: .gray) {
                         parsed.shotType = $0
                     }
                     fieldHeader("Ergebnis", missing: showMissing && parsed.result == nil)
@@ -78,6 +78,13 @@ struct VoiceShotSheet: View {
                     BigButtonGrid(items: ShotConsequence.allCases, label: \.label, selected: parsed.consequence, tint: .gray) {
                         parsed.consequence = (parsed.consequence == $0) ? nil : $0
                     }
+                    fieldHeader("Green in Regulation (optional)", missing: false)
+                    Picker("GIR", selection: $parsed.gir) {
+                        Text("–").tag(Bool?.none)
+                        Text("Getroffen").tag(Bool?.some(true))
+                        Text("Verfehlt").tag(Bool?.some(false))
+                    }
+                    .pickerStyle(.segmented)
                 }
                 .padding()
             }
@@ -198,7 +205,7 @@ struct VoiceShotSheet: View {
 
     private func saveIfComplete() {
         guard let type = parsed.shotType, let result = parsed.result else { return }
-        onSave(type, result, parsed.consequence)
+        onSave(type, result, parsed.consequence, parsed.gir)
     }
 
     private func trySave() {
@@ -207,7 +214,7 @@ struct VoiceShotSheet: View {
             return
         }
         stopListening()
-        onSave(type, result, parsed.consequence)
+        onSave(type, result, parsed.consequence, parsed.gir)
         dismiss()
     }
 

@@ -18,14 +18,24 @@ struct ShotPhraseParserTests {
         Case(phrase: "Hybrid zu kurz", type: .woodHybrid, result: .short, consequence: nil),
         Case(phrase: "Fairwayholz gerade", type: .woodHybrid, result: .good, consequence: nil),
         Case(phrase: "Dreier Holz links", type: .woodHybrid, result: .left, consequence: nil),
-        Case(phrase: "Langes Eisen rechts", type: .longIron, result: .right, consequence: nil),
-        Case(phrase: "Fünfer Eisen zu lang", type: .longIron, result: .long, consequence: nil),
-        Case(phrase: "Eisen 4 links ins Wasser", type: .longIron, result: .left, consequence: .water),
-        Case(phrase: "Kurzes Eisen gut", type: .shortIronWedge, result: .good, consequence: nil),
-        Case(phrase: "Siebener Eisen rechts ins Wasser", type: .shortIronWedge, result: .right, consequence: .water),
-        Case(phrase: "7er Eisen zu kurz in den Bunker", type: .shortIronWedge, result: .short, consequence: .bunker),
-        Case(phrase: "Pitching Wedge zu lang", type: .shortIronWedge, result: .long, consequence: nil),
-        Case(phrase: "Sandwedge links", type: .shortIronWedge, result: .left, consequence: nil),
+        Case(phrase: "Eisen 6 rechts", type: .iron6, result: .right, consequence: nil),
+        Case(phrase: "Fünfer Eisen zu lang", type: .iron5, result: .long, consequence: nil),
+        Case(phrase: "Eisen 8 links ins Wasser", type: .iron8, result: .left, consequence: .water),
+        Case(phrase: "Neuner gut", type: .iron9, result: .good, consequence: nil),
+        Case(phrase: "Siebener Eisen rechts ins Wasser", type: .iron7, result: .right, consequence: .water),
+        Case(phrase: "7er Eisen zu kurz in den Bunker", type: .iron7, result: .short, consequence: .bunker),
+        Case(phrase: "Pitching Wedge zu lang", type: .wedge, result: .long, consequence: nil),
+        Case(phrase: "Sandwedge links", type: .wedge, result: .left, consequence: nil),
+        Case(phrase: "Eisen sechs links", type: .iron6, result: .left, consequence: nil),
+        Case(phrase: "Achter Eisen zu kurz", type: .iron8, result: .short, consequence: nil),
+        Case(phrase: "5er Hybrid links", type: .woodHybrid, result: .left, consequence: nil),
+        Case(phrase: "Drive Fairway", type: .drive, result: .good, consequence: .fairway),
+        Case(phrase: "Drive rechts aufs Fairway", type: .drive, result: .right, consequence: .fairway),
+        Case(phrase: "Eisen 9 aufs Grün", type: .iron9, result: .good, consequence: .green),
+        Case(phrase: "Eisen 7 zu lang, Grün", type: .iron7, result: .long, consequence: .green),
+        Case(phrase: "Hybrid rechts First Cut", type: .woodHybrid, result: .right, consequence: .firstCut),
+        Case(phrase: "Drive links Semi-Rough", type: .drive, result: .left, consequence: .firstCut),
+        Case(phrase: "Drive links im Rough", type: .drive, result: .left, consequence: .rough),
         Case(phrase: "Pitch zu kurz", type: .pitch, result: .short, consequence: nil),
         Case(phrase: "Chip gut", type: .chip, result: .good, consequence: nil),
         Case(phrase: "Chip zu weit", type: .chip, result: .long, consequence: nil),
@@ -53,9 +63,9 @@ struct ShotPhraseParserTests {
         #expect(parsed == ParsedShot(shotType: .drive, result: .good, consequence: nil))
     }
 
-    @Test func kurzesEisenDoesNotBecomeShort() {
-        let parsed = ShotPhraseParser.parse("kurzes Eisen rechts")
-        #expect(parsed.result == .right)
+    @Test func ironsAreRecognizedIndividually() {
+        let phrases = ["Eisen 5", "6er Eisen", "Siebener", "Eisen acht", "Neuner Eisen"]
+        #expect(phrases.map { ShotPhraseParser.parse($0).shotType } == [.iron5, .iron6, .iron7, .iron8, .iron9])
     }
 
     @Test func incompletePhraseLeavesFieldsEmpty() {
@@ -101,7 +111,7 @@ struct ShotPhraseParserTests {
     @Test func noCommandWithoutCommandWord() {
         let (shot, command) = ShotPhraseParser.parseUtterance("Siebener Eisen rechts ins Wasser")
         #expect(command == nil)
-        #expect(shot == ParsedShot(shotType: .shortIronWedge, result: .right, consequence: .water))
+        #expect(shot == ParsedShot(shotType: .iron7, result: .right, consequence: .water))
     }
 
     @Test func commandAloneGivesEmptyShot() {
@@ -154,6 +164,30 @@ struct ShotPhraseParserTests {
     @Test func plainShotHasNoRoundCommand() {
         let utterance = ShotPhraseParser.parseRoundUtterance("Siebener Eisen rechts ins Wasser")
         #expect(utterance.roundCommand == nil)
-        #expect(utterance.shot == ParsedShot(shotType: .shortIronWedge, result: .right, consequence: .water))
+        #expect(utterance.shot == ParsedShot(shotType: .iron7, result: .right, consequence: .water))
+    }
+
+    // MARK: GIR
+
+    @Test func girHitByPhrase() {
+        let parsed = ShotPhraseParser.parse("Eisen 8 gut, Grün getroffen")
+        #expect(parsed == ParsedShot(shotType: .iron8, result: .good, consequence: .green, gir: true))
+    }
+
+    @Test func girMissedIsNotGreen() {
+        let parsed = ShotPhraseParser.parse("Wedge rechts, Grün verfehlt")
+        #expect(parsed == ParsedShot(shotType: .wedge, result: .right, consequence: nil, gir: false))
+    }
+
+    @Test func nichtAufsGruenIsMissed() {
+        let parsed = ShotPhraseParser.parse("Eisen 7 zu kurz, nicht aufs Grün")
+        #expect(parsed.gir == false)
+        #expect(parsed.consequence == nil)
+        #expect(parsed.result == .short)
+    }
+
+    @Test func standaloneGIRAnswer() {
+        #expect(ShotPhraseParser.parse("GIR ja") == ParsedShot(shotType: nil, result: .good, consequence: .green, gir: true))
+        #expect(ShotPhraseParser.parse("GIR nein") == ParsedShot(gir: false))
     }
 }

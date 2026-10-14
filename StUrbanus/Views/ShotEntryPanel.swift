@@ -1,8 +1,11 @@
 import SwiftUI
 
 /// Erfassung per Tipp in drei Schritten: Schlagart → Ergebnis → optionale Folge.
+/// Beim GIR-Schlag (Par−2) wird in Schritt 3 ausdrücklich gefragt, ob das Grün getroffen wurde.
 struct ShotEntryPanel: View {
-    let onSave: (ShotType, ShotResult, ShotConsequence?) -> Void
+    /// Ist der nächste Schlag der GIR-Schlag dieses Lochs?
+    var isGIRShot = false
+    let onSave: (ShotType, ShotResult, ShotConsequence?, Bool?) -> Void
 
     @State private var shotType: ShotType?
     @State private var result: ShotResult?
@@ -10,23 +13,51 @@ struct ShotEntryPanel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let shotType, let result {
-                stepHeader("3. Folge (optional)", summary: "\(shotType.label) · \(result.label)")
-                BigButtonGrid(items: ShotConsequence.allCases, label: \.label, tint: .red) { consequence in
-                    save(shotType, result, consequence)
+                stepHeader(isGIRShot ? "3. Folge · GIR-Schlag" : "3. Folge (optional)", summary: "\(shotType.label) · \(result.label)")
+                if isGIRShot {
+                    girQuestion(shotType, result)
                 }
-                BigButton(title: "Ohne Folge speichern", systemImage: "checkmark", tint: .accentColor) {
-                    save(shotType, result, nil)
+                BigButtonGrid(items: ShotConsequence.allCases.filter { !isGIRShot || $0 != .green },
+                              label: \.label, tint: .red) { consequence in
+                    save(shotType, result, consequence, gir: nil)
+                }
+                if !isGIRShot {
+                    BigButton(title: "Ohne Folge speichern", systemImage: "checkmark", tint: .accentColor) {
+                        save(shotType, result, nil, gir: nil)
+                    }
                 }
             } else if let shotType {
                 stepHeader("2. Ergebnis", summary: shotType.label)
                 BigButtonGrid(items: ShotResult.allCases, label: \.label, symbol: \.symbol, tint: .orange) { result = $0 }
             } else {
-                stepHeader("1. Schlagart", summary: nil)
-                BigButtonGrid(items: ShotType.allCases, label: \.label, symbol: \.symbol, tint: .accentColor) { shotType = $0 }
+                stepHeader("1. Schlagart", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
+                BigButtonGrid(items: ShotType.selectable, label: \.label, symbol: \.symbol, tint: .accentColor) { shotType = $0 }
             }
         }
         .animation(.snappy, value: shotType)
         .animation(.snappy, value: result)
+    }
+
+    /// Hervorgehobene GIR-Frage: Grün getroffen (Folge „Grün“) oder verfehlt.
+    @ViewBuilder
+    private func girQuestion(_ type: ShotType, _ result: ShotResult) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Green in Regulation – Grün getroffen?", systemImage: "flag.fill")
+                .font(.subheadline.bold())
+            HStack(spacing: 10) {
+                BigButton(title: "Grün getroffen", systemImage: "checkmark.circle.fill", tint: .green) {
+                    save(type, result, .green, gir: true)
+                }
+                BigButton(title: "Verfehlt", systemImage: "xmark.circle", tint: .gray) {
+                    save(type, result, nil, gir: false)
+                }
+            }
+            Text("Oder wähle unten, wo der Ball liegt (zählt als verfehlt).")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
     }
 
     @ViewBuilder
@@ -45,8 +76,8 @@ struct ShotEntryPanel: View {
         }
     }
 
-    private func save(_ type: ShotType, _ result: ShotResult, _ consequence: ShotConsequence?) {
-        onSave(type, result, consequence)
+    private func save(_ type: ShotType, _ result: ShotResult, _ consequence: ShotConsequence?, gir: Bool?) {
+        onSave(type, result, consequence, gir)
         shotType = nil
         self.result = nil
     }

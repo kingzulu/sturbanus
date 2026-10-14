@@ -76,4 +76,67 @@ struct RoundServiceTests {
         let reply = RoundService.handleVoice("Schönes Wetter heute", in: context)
         #expect(reply.hasPrefix("Das habe ich nicht verstanden."))
     }
+
+    // MARK: GIR (Loch 1 Par 5, Loch 2 Par 4, Loch 3 Par 3)
+
+    @Test func girHitOnPar4SecondShot() {
+        round.currentHole = 2
+        let first = RoundService.handleVoice("Drive Fairway", in: context)
+        #expect(!first.contains("Regulation"))
+        let second = RoundService.handleVoice("Eisen 8 aufs Grün", in: context)
+        #expect(second.hasSuffix("Grün in Regulation."))
+        #expect(round.currentScore?.gir == true)
+    }
+
+    @Test func girMissedOnPar3() {
+        round.currentHole = 3
+        let reply = RoundService.handleVoice("Eisen 7 rechts ins Rough", in: context)
+        #expect(reply.hasSuffix("Grün in Regulation verfehlt."))
+        #expect(round.currentScore?.gir == false)
+    }
+
+    @Test func openGIRShotIsResolvedByPutt() {
+        _ = RoundService.handleVoice("Drive gut", in: context)
+        _ = RoundService.handleVoice("Hybrid gut", in: context)
+        let gir = RoundService.handleVoice("Wedge gut", in: context)
+        #expect(gir.hasSuffix("Sag GIR ja oder GIR nein."))
+        #expect(round.currentScore?.gir == nil)
+        _ = RoundService.handleVoice("Putt drin", in: context)
+        #expect(round.currentScore?.gir == true)
+    }
+
+    @Test func chipAfterGIRShotMeansMissed() {
+        round.currentHole = 2
+        _ = RoundService.handleVoice("Drive gut", in: context)
+        _ = RoundService.handleVoice("Eisen 7 zu kurz", in: context)
+        _ = RoundService.handleVoice("Chip gut", in: context)
+        #expect(round.currentScore?.gir == false)
+    }
+
+    @Test func standaloneGIRAnswerOverrides() {
+        round.currentHole = 3
+        _ = RoundService.handleVoice("Eisen 7 gut", in: context)
+        let reply = RoundService.handleVoice("GIR nein", in: context)
+        #expect(reply == "Loch 3: Grün in Regulation verfehlt.")
+        #expect(round.currentScore?.shots.count == 1)
+        #expect(round.currentScore?.gir == false)
+    }
+
+    @Test func undoResetsDerivedGIR() {
+        round.currentHole = 3
+        _ = RoundService.handleVoice("Eisen 9 aufs Grün", in: context)
+        #expect(round.currentScore?.gir == true)
+        _ = RoundService.handleVoice("letzten Schlag löschen", in: context)
+        #expect(round.currentScore?.gir == nil)
+    }
+
+    @Test func standaloneGIRYes() {
+        round.currentHole = 2
+        _ = RoundService.handleVoice("Drive gut", in: context)
+        _ = RoundService.handleVoice("Eisen 8 gut", in: context)
+        let reply = RoundService.handleVoice("GIR ja", in: context)
+        #expect(reply == "Loch 2: Grün in Regulation.")
+        #expect(round.currentScore?.shots.count == 2)
+        #expect(round.currentScore?.gir == true)
+    }
 }

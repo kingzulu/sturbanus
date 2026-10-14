@@ -8,7 +8,7 @@ SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfa
 - `StUrbanus/Models`: SwiftData-Modelle (Course, Hole, Round, HoleScore, Shot), Enums, Seed-Daten (V-Golf St. Urbanus Köln, 18 Löcher, Par laut Scorecard, gesamt 72; in der Runde und im Tab „Platz“ änderbar).
 - `StUrbanus/Views`: Runden, Schlag-Erfassung (Schlagart → Ergebnis → Folge), Statistik, Platz (Par editierbar).
 - `StUrbanus/Speech`: Protokoll `SpeechRecognizer`, `AppleSpeechRecognizer` (Speech-Framework, de-DE, auf dem Gerät), `ShotPhraseParser` (deutsche Ansage → Felder).
-- `StUrbanusTests`: Tests für den Parser.
+- `StUrbanusTests`: Tests für Parser und Rundenlogik.
 
 Sprach-Erfassung: Ansage mit „fertig“ oder „speichern“ beenden (oder 2 s schweigen), dann wird gespeichert, sofern Schlagart und Ergebnis erkannt sind. „abbrechen“ verwirft. Fehlt etwas, bleibt die Ansicht offen und markiert das Feld.
 
@@ -23,6 +23,12 @@ Runde in der App starten, danach per „Hey Siri“ (auch über AirPods, auch be
 - „Urbanus Runde beenden“
 
 Siri antwortet gesprochen, z. B. „Drive, Rechts, Aus. Schlag 1 auf Loch 1.“ Das aktuelle Loch wird in der Runde gespeichert, App und Siri bleiben synchron.
+
+## Schläger, Folge und GIR
+
+- Schlagart: Drive, Holz/Hybrid, Eisen 5–9 einzeln, Wedge, Pitch, Chip, Bunker, Putt (per Sprache z. B. „Eisen 7“, „7er Eisen“, „Siebener“).
+- Folge (wo der Ball liegt): Fairway, First Cut, Grün, Rough, Bunker, Wasser, Aus, Strafschlag. „Drive Fairway“ oder „Eisen 9 aufs Grün“ zählen ohne Richtungsangabe als gut.
+- Green in Regulation: Der GIR-Schlag ist Schlag Par−2 (Par 3: 1., Par 4: 2., Par 5: 3.). Dort fragt die App ausdrücklich „Grün getroffen?“. GIR ergibt sich sonst aus den Schlägen (Folge „Grün“ spätestens beim GIR-Schlag oder direkt danach geputtet) und lässt sich per „GIR ja/nein“, „Grün getroffen/verfehlt“ oder über das GIR-Feld am Loch korrigieren. Die Statistik zeigt die GIR-Quote gesamt und je Par 3/4/5.
 
 Score eines Lochs = erfasste Schläge + Strafschläge (Aus, Wasser und Strafschlag zählen je +1).
 

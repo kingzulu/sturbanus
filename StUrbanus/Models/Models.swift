@@ -67,7 +67,28 @@ final class HoleScore {
         self.par = par
     }
 
+    /// Von Hand gesetztes GIR (Sprache „Grün getroffen/verfehlt“ oder Tipp); überschreibt die Ableitung.
+    var girOverride: Bool?
+
     var sortedShots: [Shot] { shots.sorted { $0.index < $1.index } }
+
+    /// Schlag, nach dem der Ball für Green in Regulation auf dem Grün sein muss (Par 3: 1, Par 4: 2, Par 5: 3).
+    var girShotNumber: Int { max(1, par - 2) }
+
+    /// Green in Regulation: `nil`, solange es noch nicht entschieden ist.
+    var gir: Bool? { girOverride ?? derivedGIR }
+
+    /// Aus den Schlägen abgeleitet: Grün spätestens mit dem GIR-Schlag erreicht, oder direkt danach geputtet.
+    var derivedGIR: Bool? {
+        let girShot = girShotNumber
+        for shot in sortedShots {
+            if shot.consequence == .green { return shot.index <= girShot }
+            if shot.shotType == .putt { return shot.index - 1 <= girShot }
+            if shot.index > girShot { return false }
+            if shot.index == girShot, shot.consequence != nil { return false }
+        }
+        return nil
+    }
     var penaltyStrokes: Int { shots.reduce(0) { $0 + ($1.consequence?.penaltyStrokes ?? 0) } }
     /// Score = erfasste Schläge + Strafschläge.
     var strokes: Int { shots.count + penaltyStrokes }

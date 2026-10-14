@@ -45,7 +45,10 @@ enum RoundService {
 
         let shot = utterance.shot
         if let type = shot.shotType, let result = shot.result {
-            replies.append(logShot(type, result, shot.consequence, in: round, context: context))
+            replies.append(logShot(type, result, shot.consequence, gir: shot.gir, in: round, context: context))
+        } else if let gir = shot.gir, shot.shotType == nil {
+            // Nur „GIR ja“ / „Grün verfehlt“: gilt für das aktuelle Loch.
+            replies.append(setGIR(gir, in: round, context: context))
         } else if shot != ParsedShot() {
             replies.append("Nicht gespeichert, \(missingFields(shot)) fehlt.")
         }
@@ -86,14 +89,35 @@ enum RoundService {
 
     @discardableResult
     static func logShot(_ type: ShotType, _ result: ShotResult, _ consequence: ShotConsequence?,
-                        in round: Round, context: ModelContext) -> String {
+                        gir: Bool? = nil, in round: Round, context: ModelContext) -> String {
         guard let score = round.currentScore else { return "Loch \(round.currentHole) gibt es in dieser Runde nicht." }
+        let girBefore = score.gir
         let index = (score.shots.map(\.index).max() ?? 0) + 1
         score.shots.append(Shot(index: index, type: type, result: result, consequence: consequence))
+        if let gir { score.girOverride = gir }
         try? context.save()
 
         let parts = [type.spokenLabel, result.label, consequence?.label].compactMap { $0 }
-        return "\(parts.joined(separator: ", ")). Schlag \(index) auf Loch \(score.holeNumber)."
+        var reply = "\(parts.joined(separator: ", ")). Schlag \(index) auf Loch \(score.holeNumber)."
+        if girBefore == nil, let girNow = score.gir {
+            reply += girNow ? " Grün in Regulation." : " Grün in Regulation verfehlt."
+        } else if score.gir == nil, index == score.girShotNumber {
+            reply += " War das Grün getroffen? Sag GIR ja oder GIR nein."
+        }
+        return reply
+    }
+
+    /// Setzt GIR für das aktuelle Loch ausdrücklich (`nil` = wieder aus den Schlägen ableiten).
+    @discardableResult
+    static func setGIR(_ gir: Bool?, in round: Round, context: ModelContext) -> String {
+        guard let score = round.currentScore else { return "Loch \(round.currentHole) gibt es in dieser Runde nicht." }
+        score.girOverride = gir
+        try? context.save()
+        switch score.gir {
+        case true?: return "Loch \(score.holeNumber): Grün in Regulation."
+        case false?: return "Loch \(score.holeNumber): Grün in Regulation verfehlt."
+        case nil: return "Loch \(score.holeNumber): GIR noch offen."
+        }
     }
 
     static func move(_ round: Round, to hole: Int, in context: ModelContext) -> String {

@@ -6,6 +6,8 @@ struct ParsedShot: Equatable, Sendable {
     var shotType: ShotType?
     var result: ShotResult?
     var consequence: ShotConsequence?
+    /// Green in Regulation ausdrücklich angesagt („Grün getroffen“ / „Grün verfehlt“).
+    var gir: Bool?
 
     var isComplete: Bool { shotType != nil && result != nil }
 }
@@ -114,6 +116,13 @@ enum ShotPhraseParser {
         scanner.blank(#"\baus\s*$"#, onlyIf: { $0.contains("sieht") })
         scanner.blank(#"\bsieht\b"#)
 
+        // GIR-Angaben zuerst, damit „Grün verfehlt“ nicht als Lage „Grün“ gelesen wird.
+        if scanner.firstMatch(of: girMissedPatterns) != nil {
+            parsed.gir = false
+        } else if scanner.firstMatch(of: girHitPatterns) != nil {
+            parsed.gir = true
+        }
+
         // „in den Bunker“ ist eine Folge, kein Bunkerschlag.
         let bunkerConsequence = scanner.firstMatch(of: [#"\b(in den|im|ins|in) bunker\b"#])
 
@@ -138,33 +147,53 @@ enum ShotPhraseParser {
         case (nil, nil):
             parsed.consequence = nil
         }
+
+        if parsed.gir == true, parsed.consequence == nil {
+            parsed.consequence = .green
+        }
+        // „Drive Fairway“ / „Eisen 9 aufs Grün“: ohne Richtungsangabe gilt der Schlag als gut.
+        if parsed.result == nil, parsed.consequence == .fairway || parsed.consequence == .green {
+            parsed.result = .good
+        }
         return parsed
     }
 
     // MARK: - Vokabular (normalisiert: klein, ohne Umlaute/Akzente, ß → ss)
 
-    private static let longIronNumbers = "(?:[345]|drei|vier|funf)"
-    private static let shortIronNumbers = "(?:[6789]|sechs|sieben|acht|neun)"
+    /// „Eisen 7“, „7er Eisen“, „Siebener Eisen“, „Siebener“ (aber nicht „5er Holz/Hybrid“).
+    private static func ironPatterns(digit: String, word: String) -> [String] {
+        [
+            #"\b(\#(digit)|\#(word))(er)? ?eisen\b"#,
+            #"\beisen ?(\#(digit)|\#(word))\b"#,
+            #"\b(\#(digit)er|\#(word)er)\b(?! ?(holz|hybrid|wood|rescue))"#,
+        ]
+    }
 
     static let shotTypeRules: [(ShotType, [String])] = [
         (.bunker, [#"\baus dem bunker\b"#, #"\bbunker ?(schlag|schuss)\b"#, #"\bsand ?schlag\b"#, #"\bexplosions ?schlag\b"#]),
         (.putt, [#"\bputt(s|en)?\b"#, #"\bgeputtet\b"#, #"\bputter\b"#]),
         (.chip, [#"\bchip(s|pen)?\b"#, #"\bgechippt\b"#]),
-        (.shortIronWedge, [
-            #"\bkurze[snm]? eisen\b"#,
-            #"\b\#(shortIronNumbers)(er)? ?eisen\b"#,
-            #"\beisen ?\#(shortIronNumbers)\b"#,
-            #"\b(pitching|sand|gap|lob)? ?wedge\b"#,
-            #"\bpw\b"#, #"\bsw\b"#,
-        ]),
+        (.wedge, [#"\b(pitching|sand|gap|lob)? ?wedge\b"#, #"\bpw\b"#, #"\bsw\b"#]),
         (.pitch, [#"\bpitch(es|en)?\b"#, #"\bgepitcht\b"#]),
-        (.longIron, [
-            #"\blange[snm]? eisen\b"#,
-            #"\b\#(longIronNumbers)(er)? ?eisen\b"#,
-            #"\beisen ?\#(longIronNumbers)\b"#,
-        ]),
+        (.iron5, ironPatterns(digit: "5", word: "funf")),
+        (.iron6, ironPatterns(digit: "6", word: "sechs")),
+        (.iron7, ironPatterns(digit: "7", word: "sieben")),
+        (.iron8, ironPatterns(digit: "8", word: "acht")),
+        (.iron9, ironPatterns(digit: "9", word: "neun")),
         (.woodHybrid, [#"\b\w*holz\b"#, #"\bhybrid\b"#, #"\brescue\b"#, #"\bwood\b"#]),
         (.drive, [#"\bdrive\b"#, #"\bdriver\b"#, #"\babschlag\b"#]),
+    ]
+
+    static let girMissedPatterns = [
+        #"\b(grun|green|gir) (verfehlt|verpasst|nicht getroffen|nein)\b"#,
+        #"\bnicht (aufs|auf das|auf dem|aufm|ins|im) grun\b"#,
+        #"\bkein (gir|green in regulation)\b"#,
+    ]
+
+    static let girHitPatterns = [
+        #"\b(grun|green) getroffen\b"#,
+        #"\bgreen in regulation\b"#,
+        #"\b(gir|g i r)( getroffen| ja)?\b"#,
     ]
 
     static let resultRules: [(ShotResult, [String])] = [
@@ -173,14 +202,18 @@ enum ShotPhraseParser {
         (.left, [#"\b(nach )?links\b"#, #"\bhook\b"#, #"\bpull\b"#]),
         (.right, [#"\b(nach )?rechts\b"#, #"\bslice\b"#, #"\bpush\b"#]),
         (.good, [#"\bgut\b"#, #"\bgerade\b"#, #"\bperfekt\b"#, #"\bsuper\b"#, #"\bsauber\b"#, #"\bok(ay)?\b"#,
-                 #"\bfairway\b"#, #"\b(aufs |auf dem )?grun\b"#, #"\beingelocht\b"#, #"\bdrin\b"#]),
+                 #"\beingelocht\b"#, #"\bdrin\b"#]),
     ]
 
     static let consequenceRules: [(ShotConsequence, [String])] = [
         (.penalty, [#"\bstraf ?schlag\b"#, #"\bstrafe\b"#, #"\bpenalty\b"#]),
         (.outOfBounds, [#"\b(ins|im) aus\b"#, #"\bout( of bounds)?\b"#, #"\bausgrenze\b"#, #"\baus\s*$"#, #"\baus\b"#]),
         (.water, [#"\bwasser\w*\b"#, #"\bteich\b"#, #"\bsee\b"#, #"\bbach\b"#]),
-        (.rough, [#"\brough\b"#, #"\bsemi\b"#]),
+        (.green, [#"\b((aufs|auf das|auf dem|aufm|ins|im) )?grun\b"#]),
+        (.fairway, [#"\b((aufs|auf das|auf dem|aufm|ins|im) )?fairway\b"#]),
+        // Vor „Rough“, damit „Semi-Rough“ als First Cut zählt.
+        (.firstCut, [#"\bfirst ?cut\b"#, #"\berste[nr]? (schnitt|cut)\b"#, #"\bsemi ?(rough)?\b"#, #"\bcut\b"#]),
+        (.rough, [#"\brough\b"#]),
         (.bunker, [#"\bbunker\b"#]),
     ]
 
