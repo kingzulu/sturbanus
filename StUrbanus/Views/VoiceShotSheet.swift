@@ -5,6 +5,8 @@ import SwiftUI
 /// Fehlt Schlagart oder Ergebnis, bleibt die Ansicht offen und markiert das fehlende Feld.
 struct VoiceShotSheet: View {
     let recognizer: any SpeechRecognizer
+    /// Nummer des Schlags auf dem aktuellen Loch, falls bekannt.
+    var shotNumber: Int?
     let onSave: (ShotType, ShotResult, ShotConsequence?, Bool?) -> Void
     /// Rundenbefehle aus der Ansage („nächstes Loch“, „Loch 7“, …).
     var onRoundCommand: (RoundCommand) -> Void = { _ in }
@@ -66,7 +68,7 @@ struct VoiceShotSheet: View {
 
                     Divider()
 
-                    fieldHeader("Nächster Schlag:", missing: showMissing && parsed.shotType == nil)
+                    fieldHeader(shotNumber.map { "\($0). Schlag:" } ?? "Schlag:", missing: showMissing && parsed.shotType == nil)
                     BigButtonGrid(items: ShotType.selectable, label: \.label, selected: parsed.shotType, tint: .gray) {
                         parsed.shotType = $0
                     }

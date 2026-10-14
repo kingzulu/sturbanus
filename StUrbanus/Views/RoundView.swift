@@ -33,7 +33,7 @@ struct RoundView: View {
                                 goTo(score.holeNumber + 1)
                             }
                         } else {
-                            ShotEntryPanel(isGIRShot: isNextShotGIRShot(score)) { type, result, consequence, gir in
+                            ShotEntryPanel(shotNumber: nextShotNumber(score), isGIRShot: isNextShotGIRShot(score)) { type, result, consequence, gir in
                                 RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
                             }
                         }
@@ -86,7 +86,7 @@ struct RoundView: View {
             Text("Diese Runde mit allen Schlägen wird gelöscht und zählt nicht mehr in der Statistik. Das lässt sich nicht rückgängig machen.")
         }
         .sheet(isPresented: $showVoice) {
-            VoiceShotSheet(recognizer: AppleSpeechRecognizer(), onSave: { type, result, consequence, gir in
+            VoiceShotSheet(recognizer: AppleSpeechRecognizer(), shotNumber: currentScore.map(nextShotNumber), onSave: { type, result, consequence, gir in
                 RoundService.logShot(type, result, consequence, gir: gir, in: round, context: context)
             }, onRoundCommand: { command in
                 _ = RoundService.apply(command, to: round, in: context)
@@ -94,9 +94,11 @@ struct RoundView: View {
         }
     }
 
+    private func nextShotNumber(_ score: HoleScore) -> Int { score.nextStrokeNumber }
+
     /// Der nächste Schlag ist der GIR-Schlag (Par−2), solange GIR noch nicht feststeht.
     private func isNextShotGIRShot(_ score: HoleScore) -> Bool {
-        score.gir == nil && (score.shots.map(\.index).max() ?? 0) + 1 == score.girShotNumber
+        score.gir == nil && nextShotNumber(score) == score.girShotNumber
     }
 
     private func goTo(_ hole: Int) {
@@ -202,7 +204,7 @@ private struct ShotList: View {
             VStack(spacing: 6) {
                 ForEach(score.sortedShots) { shot in
                     HStack {
-                        Text("\(shot.index).")
+                        Text("\(score.strokeNumber(of: shot)).")
                             .font(.subheadline.monospacedDigit())
                             .foregroundStyle(.secondary)
                             .frame(width: 28, alignment: .leading)

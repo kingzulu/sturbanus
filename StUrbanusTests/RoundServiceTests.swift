@@ -200,4 +200,30 @@ struct RoundServiceTests {
         #expect(shots.map(\.shotType) == [.woodHybrid])
         #expect(RoundService.activeRound(in: context) === second)
     }
+
+    // MARK: Schlagnummer mit Strafschlägen
+
+    @Test func strokeNumberCountsPenalties() {
+        round.currentHole = 2 // Par 4
+        _ = RoundService.handleVoice("Drive rechts ins Aus", in: context)
+        #expect(round.currentScore?.nextStrokeNumber == 3)
+        let reply = RoundService.handleVoice("Drive gut", in: context)
+        #expect(reply.hasPrefix("Drive, Gut. Schlag 3 auf Loch 2."))
+        let score = try! #require(round.currentScore)
+        #expect(score.sortedShots.map { score.strokeNumber(of: $0) } == [1, 3])
+    }
+
+    @Test func penaltyBeforeGIRShotMeansNoGIR() {
+        round.currentHole = 2 // Par 4: GIR = auf dem Grün nach 2 Schlägen
+        _ = RoundService.handleVoice("Drive links ins Wasser", in: context)
+        _ = RoundService.handleVoice("Eisen 7 aufs Grün", in: context) // 3. Schlag
+        #expect(round.currentScore?.gir == false)
+    }
+
+    @Test func par5GreenOnThirdStrokeAfterPenaltyIsGIR() {
+        round.currentHole = 1 // Par 5: GIR = auf dem Grün nach 3 Schlägen
+        _ = RoundService.handleVoice("Drive rechts ins Aus", in: context)
+        _ = RoundService.handleVoice("Hybrid aufs Grün", in: context) // 3. Schlag
+        #expect(round.currentScore?.gir == true)
+    }
 }

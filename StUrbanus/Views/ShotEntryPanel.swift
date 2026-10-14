@@ -3,7 +3,9 @@ import SwiftUI
 /// Erfassung per Tipp in drei Schritten: Schlagart → Ergebnis → optionale Folge (inkl. „Eingelocht“).
 /// Beim GIR-Schlag (Par−2) wird in Schritt 3 ausdrücklich gefragt, ob das Grün getroffen wurde.
 struct ShotEntryPanel: View {
-    /// Ist der nächste Schlag der GIR-Schlag dieses Lochs?
+    /// Nummer des Schlags, der gerade erfasst wird (1. Schlag, 2. Schlag, …).
+    var shotNumber = 1
+    /// Ist dieser Schlag der GIR-Schlag des Lochs?
     var isGIRShot = false
     let onSave: (ShotType, ShotResult, ShotConsequence?, Bool?) -> Void
 
@@ -33,7 +35,7 @@ struct ShotEntryPanel: View {
                 stepHeader("Ergebnis:", summary: shotType.label)
                 BigButtonGrid(items: ShotResult.allCases, label: \.label, symbol: \.symbol, tint: .orange) { result = $0 }
             } else {
-                stepHeader("Nächster Schlag:", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
+                stepHeader("\(shotNumber). Schlag:", summary: isGIRShot ? "GIR-Schlag" : nil)
                 BigButtonGrid(items: ShotType.selectable, label: \.label, symbol: \.symbol, tint: .accentColor) { shotType = $0 }
             }
         }

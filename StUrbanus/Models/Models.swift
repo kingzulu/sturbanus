@@ -81,16 +81,34 @@ final class HoleScore {
     /// Green in Regulation: `nil`, solange es noch nicht entschieden ist.
     var gir: Bool? { girOverride ?? derivedGIR }
 
+    /// Schlagnummer wie auf der Scorekarte: Strafschläge davor zählen mit (Drive ins Aus → nächster ist der 3.).
+    func strokeNumber(of shot: Shot) -> Int {
+        var stroke = 0
+        for other in sortedShots {
+            stroke += 1
+            if other === shot { return stroke }
+            stroke += other.consequence?.penaltyStrokes ?? 0
+        }
+        return stroke
+    }
+
+    /// Nummer des nächsten Schlags auf diesem Loch (mit Strafschlägen).
+    var nextStrokeNumber: Int { strokes + 1 }
+
     /// Aus den Schlägen abgeleitet: Grün spätestens mit dem GIR-Schlag erreicht, oder direkt danach geputtet.
+    /// Gezählt wird mit Strafschlägen, wie auf der Scorekarte.
     var derivedGIR: Bool? {
         let girShot = girShotNumber
+        var stroke = 0
         for shot in sortedShots {
+            stroke += 1
             // Geputtet wird vom Grün: es wurde mit dem vorherigen Schlag erreicht.
-            if shot.shotType == .putt { return shot.index - 1 <= girShot }
+            if shot.shotType == .putt { return stroke - 1 <= girShot }
             // Eingelocht zählt wie Grün getroffen (auch ein Chip-in).
-            if shot.consequence == .green || shot.consequence == .holed { return shot.index <= girShot }
-            if shot.index > girShot { return false }
-            if shot.index == girShot, shot.consequence != nil { return false }
+            if shot.consequence == .green || shot.consequence == .holed { return stroke <= girShot }
+            if stroke > girShot { return false }
+            if stroke == girShot, shot.consequence != nil { return false }
+            stroke += shot.consequence?.penaltyStrokes ?? 0
         }
         return nil
     }

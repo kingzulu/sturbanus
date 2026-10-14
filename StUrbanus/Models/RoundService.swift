@@ -103,13 +103,14 @@ enum RoundService {
                         gir: Bool? = nil, in round: Round, context: ModelContext) -> String {
         guard let score = round.currentScore else { return "Loch \(round.currentHole) gibt es in dieser Runde nicht." }
         let girBefore = score.gir
+        let stroke = score.nextStrokeNumber
         let index = (score.shots.map(\.index).max() ?? 0) + 1
         score.shots.append(Shot(index: index, type: type, result: result, consequence: consequence))
         if let gir { score.girOverride = gir }
         try? context.save()
 
         let parts = [type.spokenLabel, result.label, consequence?.label].compactMap { $0 }
-        var reply = "\(parts.joined(separator: ", ")). Schlag \(index) auf Loch \(score.holeNumber)."
+        var reply = "\(parts.joined(separator: ", ")). Schlag \(stroke) auf Loch \(score.holeNumber)."
         if consequence == .holed {
             let relative = score.strokes - score.par
             let word = switch relative {
@@ -124,7 +125,7 @@ enum RoundService {
         }
         if girBefore == nil, let girNow = score.gir {
             reply += girNow ? " Grün in Regulation." : " Grün in Regulation verfehlt."
-        } else if score.gir == nil, index == score.girShotNumber {
+        } else if score.gir == nil, stroke == score.girShotNumber {
             reply += " War das Grün getroffen? Sag GIR ja oder GIR nein."
         }
         return reply
