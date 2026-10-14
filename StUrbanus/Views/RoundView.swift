@@ -6,7 +6,10 @@ struct RoundView: View {
     @Environment(\.modelContext) private var context
     /// Das aktuelle Loch liegt in der Runde selbst, damit Siri („nächstes Loch“) und App synchron bleiben.
     @Bindable var round: Round
+    /// Löscht die Runde; die Liste kümmert sich um Navigation und Löschen.
+    var onDelete: () -> Void = {}
     @State private var showVoice = false
+    @State private var confirmDelete = false
 
     private var currentScore: HoleScore? { round.currentScore }
 
@@ -49,6 +52,15 @@ struct RoundView: View {
                     Label("Sprechen", systemImage: "mic.fill")
                 }
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button("Runde löschen", systemImage: "trash", role: .destructive) {
+                        confirmDelete = true
+                    }
+                } label: {
+                    Label("Mehr", systemImage: "ellipsis.circle")
+                }
+            }
         }
         // Eigene Leiste statt Toolbar-.bottomBar, die von der TabBar verdeckt wird.
         .safeAreaInset(edge: .bottom) {
@@ -67,6 +79,11 @@ struct RoundView: View {
             .padding(.horizontal)
             .padding(.vertical, 10)
             .background(.bar)
+        }
+        .confirmationDialog("Runde löschen?", isPresented: $confirmDelete, titleVisibility: .visible) {
+            Button("Runde löschen", role: .destructive, action: onDelete)
+        } message: {
+            Text("Diese Runde mit allen Schlägen wird gelöscht und zählt nicht mehr in der Statistik. Das lässt sich nicht rückgängig machen.")
         }
         .sheet(isPresented: $showVoice) {
             VoiceShotSheet(recognizer: AppleSpeechRecognizer(), onSave: { type, result, consequence, gir in

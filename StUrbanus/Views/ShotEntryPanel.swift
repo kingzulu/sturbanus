@@ -33,7 +33,7 @@ struct ShotEntryPanel: View {
                 stepHeader("Ergebnis:", summary: shotType.label)
                 BigButtonGrid(items: ShotResult.allCases, label: \.label, symbol: \.symbol, tint: .orange) { result = $0 }
             } else {
-                stepHeader("Schlagart:", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
+                stepHeader("Nächster Schlag:", summary: isGIRShot ? "nächster Schlag ist der GIR-Schlag" : nil)
                 BigButtonGrid(items: ShotType.selectable, label: \.label, symbol: \.symbol, tint: .accentColor) { shotType = $0 }
             }
         }

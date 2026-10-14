@@ -66,7 +66,7 @@ struct VoiceShotSheet: View {
 
                     Divider()
 
-                    fieldHeader("Schlagart:", missing: showMissing && parsed.shotType == nil)
+                    fieldHeader("Nächster Schlag:", missing: showMissing && parsed.shotType == nil)
                     BigButtonGrid(items: ShotType.selectable, label: \.label, selected: parsed.shotType, tint: .gray) {
                         parsed.shotType = $0
                     }

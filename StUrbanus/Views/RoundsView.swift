@@ -6,6 +6,7 @@ struct RoundsView: View {
     @Query(sort: \Round.date, order: .reverse) private var rounds: [Round]
     @Query(sort: \Course.createdAt) private var courses: [Course]
     @State private var path: [Round] = []
+    @State private var roundToDelete: Round?
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -29,14 +30,36 @@ struct RoundsView: View {
                             NavigationLink(value: round) {
                                 RoundRow(round: round)
                             }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                Button("Löschen", systemImage: "trash", role: .destructive) {
+                                    roundToDelete = round
+                                }
+                            }
                         }
-                        .onDelete(perform: delete)
                     }
                 }
             }
             .navigationTitle("Runden")
             .navigationDestination(for: Round.self) { round in
-                RoundView(round: round)
+                RoundView(round: round) {
+                    // Erst zurück zur Liste, dann löschen, damit keine Ansicht mehr auf die Runde zeigt.
+                    path.removeAll()
+                    Task {
+                        try? await Task.sleep(for: .milliseconds(500))
+                        RoundService.deleteRound(round, in: context)
+                    }
+                }
+            }
+            .confirmationDialog("Runde löschen?", isPresented: Binding(
+                get: { roundToDelete != nil },
+                set: { if !$0 { roundToDelete = nil } }
+            ), titleVisibility: .visible, presenting: roundToDelete) { round in
+                Button("Runde löschen", role: .destructive) {
+                    RoundService.deleteRound(round, in: context)
+                    roundToDelete = nil
+                }
+            } message: { round in
+                Text("Die Runde vom \(round.date.formatted(date: .abbreviated, time: .shortened)) mit allen Schlägen wird gelöscht und zählt nicht mehr in der Statistik. Das lässt sich nicht rückgängig machen.")
             }
         }
     }
@@ -46,12 +69,6 @@ struct RoundsView: View {
         path.append(RoundService.startRound(on: course, in: context))
     }
 
-    private func delete(at offsets: IndexSet) {
-        for index in offsets {
-            context.delete(rounds[index])
-        }
-        try? context.save()
-    }
 }
 
 private struct RoundRow: View {

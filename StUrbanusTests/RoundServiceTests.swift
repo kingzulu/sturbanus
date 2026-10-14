@@ -168,4 +168,36 @@ struct RoundServiceTests {
         #expect(round.currentScore?.gir == true)
         #expect(round.currentScore?.isHoled == true)
     }
+
+    // MARK: Runde löschen
+
+    @Test func deletingRoundRemovesScoresAndShots() throws {
+        _ = RoundService.handleVoice("Drive Fairway", in: context)
+        _ = RoundService.handleVoice("Eisen 7 aufs Grün, nächstes Loch", in: context)
+        _ = RoundService.handleVoice("Drive links", in: context)
+        #expect(try context.fetchCount(FetchDescriptor<Shot>()) == 3)
+
+        RoundService.deleteRound(round, in: context)
+
+        #expect(try context.fetchCount(FetchDescriptor<Round>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<HoleScore>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<Shot>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<Course>()) == 1)
+        #expect(RoundService.activeRound(in: context) == nil)
+        #expect(RoundService.handleVoice("Drive gut", in: context) == RoundService.noActiveRound)
+    }
+
+    @Test func deletingOneRoundKeepsOthers() throws {
+        _ = RoundService.handleVoice("Drive gut", in: context)
+        let course = try #require(round.course)
+        let second = RoundService.startRound(on: course, in: context)
+        _ = RoundService.handleVoice("Hybrid links", in: context)
+
+        RoundService.deleteRound(round, in: context)
+
+        #expect(try context.fetchCount(FetchDescriptor<Round>()) == 1)
+        let shots = try context.fetch(FetchDescriptor<Shot>())
+        #expect(shots.map(\.shotType) == [.woodHybrid])
+        #expect(RoundService.activeRound(in: context) === second)
+    }
 }

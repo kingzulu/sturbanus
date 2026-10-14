@@ -31,6 +31,17 @@ enum RoundService {
         return round
     }
 
+    /// Löscht eine Runde samt Löchern und Schlägen; sie taucht danach auch in der Statistik nicht mehr auf.
+    /// War es die laufende Runde, hat Siri danach keine aktive Runde mehr.
+    static func deleteRound(_ round: Round, in context: ModelContext) {
+        for score in round.holeScores {
+            for shot in score.shots { context.delete(shot) }
+            context.delete(score)
+        }
+        context.delete(round)
+        try? context.save()
+    }
+
     /// Wertet eine gesprochene Ansage aus („Drive rechts ins Aus“, „Putt drin, nächstes Loch“, „Loch 7“).
     static func handleVoice(_ phrase: String, in context: ModelContext) -> String {
         guard let round = activeRound(in: context) else { return noActiveRound }
