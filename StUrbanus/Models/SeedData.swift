@@ -8,13 +8,18 @@ enum SeedData {
     static let stUrbanusPars = [5, 4, 3, 4, 3, 5, 4, 5, 4,
                                 4, 4, 3, 5, 4, 3, 5, 3, 4]
 
-    /// Legt den Heimatplatz an, falls noch kein Platz existiert, und korrigiert
-    /// ältere Installationen, die noch die Platzhalter-Pars (überall 4) haben.
+    static let seededKey = "didSeedDefaultCourse"
+
+    /// Legt beim ersten Start den Heimatplatz an und korrigiert ältere Installationen,
+    /// die noch die Platzhalter-Pars (überall 4) haben. Hat jemand alle Plätze gelöscht,
+    /// wird St. Urbanus nicht wieder angelegt.
     @MainActor
-    static func seedIfNeeded(_ context: ModelContext) {
+    static func seedIfNeeded(_ context: ModelContext, defaults: UserDefaults = .standard) {
         let courses = (try? context.fetch(FetchDescriptor<Course>())) ?? []
 
         guard !courses.isEmpty else {
+            guard !defaults.bool(forKey: seededKey) else { return }
+            defaults.set(true, forKey: seededKey)
             let course = Course(name: stUrbanusName)
             context.insert(course)
             for (offset, par) in stUrbanusPars.enumerated() {
@@ -24,6 +29,7 @@ enum SeedData {
             return
         }
 
+        defaults.set(true, forKey: seededKey)
         if let course = courses.first(where: { $0.name == stUrbanusName }) {
             applyScorecardParsIfPlaceholder(course, context: context)
         }

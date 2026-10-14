@@ -1,26 +1,32 @@
-# St. Urbanus – Golf-Caddy (iOS)
+# Caddy – Golf-Caddy für iPhone (Projekt StUrbanus)
 
 SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfasst, damit sichtbar wird, wo Schläge verloren gehen. Alle Daten bleiben lokal (SwiftData).
 
 ## Aufbau
 
 - `project.yml`: XcodeGen-Spezifikation (Quelle der Wahrheit). `StUrbanus.xcodeproj` wird daraus erzeugt.
-- `StUrbanus/Models`: SwiftData-Modelle (Course, Hole, Round, HoleScore, Shot), Enums, Seed-Daten (V-Golf St. Urbanus Köln, 18 Löcher, Par laut Scorecard, gesamt 72; in der Runde und im Tab „Platz“ änderbar).
-- `StUrbanus/Views`: Runden, Schlag-Erfassung (Schlagart → Ergebnis → Folge), Statistik, Platz (Par editierbar).
+- `StUrbanus/Models`: SwiftData-Modelle (Course, Hole, Round, HoleScore, Shot), Enums, Rundenlogik (`RoundService`), Plätze (`CourseService`), Seed-Daten (V-Golf St. Urbanus Köln, 18 Löcher, Par laut Scorecard, gesamt 72).
+- `StUrbanus/Views`: Runden, Schlag-Erfassung (Schlag → Ergebnis → Folge), Statistik (Filter nach Platz), Plätze.
 - `StUrbanus/Speech`: Protokoll `SpeechRecognizer`, `AppleSpeechRecognizer` (Speech-Framework, de-DE, auf dem Gerät), `ShotPhraseParser` (deutsche Ansage → Felder).
 - `StUrbanusTests`: Tests für Parser und Rundenlogik.
 
 Sprach-Erfassung: Ansage mit „fertig“ oder „speichern“ beenden (oder 2 s schweigen), dann wird gespeichert, sofern Schlagart und Ergebnis erkannt sind. „abbrechen“ verwirft. Fehlt etwas, bleibt die Ansicht offen und markiert das Feld.
 
+## Plätze
+
+Im Tab „Plätze“ lassen sich beliebige Plätze anlegen, umbenennen und löschen: Name, 9 oder 18 Löcher, Par je Loch. St. Urbanus ist vorinstalliert. Beim Rundenstart wählt man den Platz (zuletzt gespielter oben). Gespielte Runden behalten ihre Pars; ein Platz mit Runden lässt sich erst löschen, wenn seine Runden gelöscht sind.
+
 ## Freihändig mit Siri (iPhone kann im Bag bleiben)
 
 Runde in der App starten, danach per „Hey Siri“ (auch über AirPods, auch bei gesperrtem iPhone):
 
-- „Urbanus Schlag“ → Siri fragt „Welcher Schlag?“ → „Drive rechts ins Aus“ (oder „Putt drin, nächstes Loch“)
-- „Urbanus nächstes Loch“ / „Urbanus vorheriges Loch“
-- „Urbanus letzten Schlag löschen“
-- „Urbanus Spielstand“
-- „Urbanus Runde beenden“
+- „Caddy Schlag“ → Siri fragt „Welcher Schlag?“ → „Drive rechts ins Aus“ (oder „Putt drin, nächstes Loch“)
+- „Caddy nächstes Loch“ / „Caddy vorheriges Loch“
+- „Caddy letzten Schlag löschen“
+- „Caddy Spielstand“
+- „Caddy Runde beenden“
+
+Statt „Caddy“ versteht Siri auch „Urbanus“, „Golf Caddy“ und „Mein Caddy“.
 
 Siri antwortet gesprochen, z. B. „Drive, Rechts, Aus. Schlag 1 auf Loch 1.“ Das aktuelle Loch wird in der Runde gespeichert, App und Siri bleiben synchron.
 

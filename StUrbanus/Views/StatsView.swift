@@ -3,15 +3,22 @@ import SwiftUI
 
 /// Wo gehen Schläge verloren? Fehlermuster pro Schlagart über alle Runden.
 struct StatsView: View {
-    @Query private var shots: [Shot]
-    @Query private var rounds: [Round]
-    @Query private var holeScores: [HoleScore]
+    @Query private var allShots: [Shot]
+    @Query private var allRounds: [Round]
+    @Query private var allHoleScores: [HoleScore]
+    @Query(sort: \Course.createdAt) private var courses: [Course]
+    /// `nil` = alle Plätze.
+    @State private var courseFilter: PersistentIdentifier?
+
+    private var shots: [Shot] { allShots.filter { StatsFilter.matches($0.holeScore?.round, courseFilter) } }
+    private var rounds: [Round] { allRounds.filter { StatsFilter.matches($0, courseFilter) } }
+    private var holeScores: [HoleScore] { allHoleScores.filter { StatsFilter.matches($0.round, courseFilter) } }
 
     var body: some View {
         NavigationStack {
             List {
                 if shots.isEmpty {
-                    ContentUnavailableView("Noch keine Daten",
+                    ContentUnavailableView(courseFilter == nil ? "Noch keine Daten" : "Keine Daten für diesen Platz",
                                            systemImage: "chart.bar",
                                            description: Text("Erfasse Schläge in einer Runde, dann siehst du hier deine Fehlermuster."))
                 } else {
@@ -48,7 +55,34 @@ struct StatsView: View {
                 }
             }
             .navigationTitle("Statistik")
+            .toolbar {
+                if courses.count > 1 {
+                    Menu {
+                        Picker("Platz", selection: $courseFilter) {
+                            Text("Alle Plätze").tag(PersistentIdentifier?.none)
+                            ForEach(courses) { course in
+                                Text(course.name).tag(PersistentIdentifier?.some(course.persistentModelID))
+                            }
+                        }
+                    } label: {
+                        Label(courseFilterName, systemImage: "line.3.horizontal.decrease.circle")
+                            .labelStyle(.titleAndIcon)
+                    }
+                }
+            }
         }
+    }
+
+    private var courseFilterName: String {
+        courses.first { $0.persistentModelID == courseFilter }?.name ?? "Alle Plätze"
+    }
+}
+
+/// Filtert Statistikdaten nach Platz.
+enum StatsFilter {
+    static func matches(_ round: Round?, _ course: PersistentIdentifier?) -> Bool {
+        guard let course else { return true }
+        return round?.course?.persistentModelID == course
     }
 }
 

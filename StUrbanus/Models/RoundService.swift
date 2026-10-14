@@ -22,6 +22,7 @@ enum RoundService {
         let open = (try? context.fetch(FetchDescriptor<Round>(predicate: #Predicate { !$0.isFinished }))) ?? []
         for round in open { round.isFinished = true }
 
+        course.lastUsedAt = Date()
         let round = Round(course: course)
         context.insert(round)
         for hole in course.sortedHoles {

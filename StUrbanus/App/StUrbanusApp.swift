@@ -28,8 +28,8 @@ struct RootView: View {
             Tab("Statistik", systemImage: "chart.bar") {
                 StatsView()
             }
-            Tab("Platz", systemImage: "map") {
-                CourseView()
+            Tab("Plätze", systemImage: "map") {
+                CoursesView()
             }
         }
         .task {

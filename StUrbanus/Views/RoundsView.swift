@@ -7,6 +7,7 @@ struct RoundsView: View {
     @Query(sort: \Course.createdAt) private var courses: [Course]
     @State private var path: [Round] = []
     @State private var roundToDelete: Round?
+    @State private var choosingCourse = false
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -22,6 +23,10 @@ struct RoundsView: View {
                     .buttonStyle(.borderedProminent)
                     .listRowInsets(EdgeInsets())
                     .disabled(courses.isEmpty)
+                } footer: {
+                    if courses.isEmpty {
+                        Text("Lege zuerst unter „Plätze“ einen Platz an.")
+                    }
                 }
 
                 if !rounds.isEmpty {
@@ -50,6 +55,14 @@ struct RoundsView: View {
                     }
                 }
             }
+            .confirmationDialog("Auf welchem Platz spielst du?", isPresented: $choosingCourse, titleVisibility: .visible) {
+                let options = CourseService.coursesForSelection(in: context)
+                ForEach(Array(options.enumerated()), id: \.element.id) { offset, course in
+                    Button(offset == 0 && course.lastUsedAt != nil ? "\(course.name) (zuletzt)" : course.name) {
+                        start(on: course)
+                    }
+                }
+            }
             .confirmationDialog("Runde löschen?", isPresented: Binding(
                 get: { roundToDelete != nil },
                 set: { if !$0 { roundToDelete = nil } }
@@ -64,8 +77,17 @@ struct RoundsView: View {
         }
     }
 
+    /// Ein Platz: sofort starten. Mehrere: fragen, zuletzt gespielter Platz steht oben.
     private func startRound() {
-        guard let course = courses.first else { return }
+        let options = CourseService.coursesForSelection(in: context)
+        if options.count == 1 {
+            start(on: options[0])
+        } else if options.count > 1 {
+            choosingCourse = true
+        }
+    }
+
+    private func start(on course: Course) {
         path.append(RoundService.startRound(on: course, in: context))
     }
 
@@ -79,6 +101,9 @@ private struct RoundRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(round.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.headline)
+                Text(round.course?.name ?? round.courseName)
+                    .font(.subheadline)
+                    .lineLimit(1)
                 Text(round.isFinished
                      ? "\(round.playedScores.count) von \(round.holeScores.count) Löchern"
                      : "Läuft · Loch \(round.currentHole)")

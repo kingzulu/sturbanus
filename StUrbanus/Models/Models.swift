@@ -5,6 +5,8 @@ import SwiftData
 final class Course {
     var name: String = ""
     var createdAt: Date = Date()
+    /// Zuletzt eine Runde auf diesem Platz gestartet; bestimmt die Vorauswahl beim Rundenstart.
+    var lastUsedAt: Date?
     @Relationship(deleteRule: .cascade, inverse: \Hole.course)
     var holes: [Hole] = []
 

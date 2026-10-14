@@ -4,7 +4,7 @@ import SwiftData
 // Siri-Befehle für die laufende Runde. Sie laufen ohne die App zu öffnen, auch bei
 // gesperrtem iPhone, und antworten gesprochen (z. B. über die AirPods).
 
-/// „Hey Siri, Urbanus Schlag“ → Siri fragt „Welcher Schlag?“ → „Drive rechts ins Aus“.
+/// „Hey Siri, Caddy Schlag“ → Siri fragt „Welcher Schlag?“ → „Drive rechts ins Aus“.
 struct LogShotIntent: AppIntent {
     static let title: LocalizedStringResource = "Schlag erfassen"
     static let description = IntentDescription("Erfasst einen Schlag auf dem aktuellen Loch der laufenden Runde.")
@@ -89,7 +89,7 @@ struct EndRoundIntent: AppIntent {
     }
 }
 
-/// Siri-Sätze. Jeder Satz muss den App-Namen („Urbanus“) enthalten.
+/// Siri-Sätze. Jeder Satz muss den App-Namen („Caddy“, alternativ „Urbanus“) enthalten.
 struct UrbanusShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
