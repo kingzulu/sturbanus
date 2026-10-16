@@ -4,45 +4,53 @@ import Foundation
 import ImageIO
 import UniformTypeIdentifiers
 
-// 1024×1024, Vollbild: dunkelgrüner Verlauf, schlanke weiße Fahnenstange mit rotem Wimpel,
-// hellgrünes Grün-Oval mit Loch am Fuß. iOS rundet die Ecken selbst ab.
+// „C“ für Caddy im Stil des ZG-Logos (Gold, Rot, Blau auf Marineblau), darin eine Fahne auf dem Grün.
+// Gezeichnet im 160er-Raster des Entwurfs und auf 1024 px skaliert; iOS rundet die Ecken selbst ab.
 let size = 1024
+let scale = CGFloat(size) / 160
 let space = CGColorSpace(name: CGColorSpace.sRGB)!
 let ctx = CGContext(data: nil, width: size, height: size, bitsPerComponent: 8, bytesPerRow: 0,
                     space: space, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
-func color(_ hex: UInt32, _ a: CGFloat = 1) -> CGColor {
+func color(_ hex: UInt32) -> CGColor {
     CGColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255,
-            blue: CGFloat(hex & 0xFF) / 255, alpha: a)
+            blue: CGFloat(hex & 0xFF) / 255, alpha: 1)
 }
-// CoreGraphics zählt y von unten; Helfer, um mit y von oben zu zeichnen.
-func y(_ v: CGFloat) -> CGFloat { CGFloat(size) - v }
+let navy = color(0x1B2233), white = color(0xFFFFFF), gold = color(0xFFC20A), blue = color(0x1555A5), red = color(0xDB202C)
 
-// Hintergrund: Verlauf von oben nach unten.
-let bg = CGGradient(colorsSpace: space, colors: [color(0x2E8B57), color(0x1B5E3A)] as CFArray, locations: [0, 1])!
-ctx.drawLinearGradient(bg, start: CGPoint(x: 0, y: y(0)), end: CGPoint(x: 0, y: y(1024)), options: [])
+// Koordinaten wie im Entwurf: Ursprung oben links, y nach unten.
+ctx.translateBy(x: 0, y: CGFloat(size))
+ctx.scaleBy(x: scale, y: -scale)
 
-// Grün-Oval am Fuß der Fahne.
-ctx.setFillColor(color(0x7CC77C))
-ctx.fillEllipse(in: CGRect(x: 150, y: y(900), width: 724, height: 196))
+ctx.setFillColor(navy)
+ctx.fill(CGRect(x: 0, y: 0, width: 160, height: 160))
 
-// Loch.
-let poleX: CGFloat = 430
-let poleWidth: CGFloat = 18
-ctx.setFillColor(color(0x1B4D30))
-ctx.fillEllipse(in: CGRect(x: poleX - 42 + poleWidth / 2, y: y(820), width: 84, height: 28))
+/// Bogenstück des C von `from` nach `to` (Grad, 0 = rechts, positiv im Uhrzeigersinn).
+func arc(from: CGFloat, to: CGFloat, _ stroke: CGColor) {
+    let center = CGPoint(x: 76, y: 82), radius: CGFloat = 46, steps = 96
+    ctx.beginPath()
+    for i in 0...steps {
+        let angle = (from + (to - from) * CGFloat(i) / CGFloat(steps)) * .pi / 180
+        let p = CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
+        i == 0 ? ctx.move(to: p) : ctx.addLine(to: p)
+    }
+    ctx.setStrokeColor(stroke)
+    ctx.setLineWidth(18)
+    ctx.setLineCap(.butt)
+    ctx.strokePath()
+}
+arc(from: -42, to: -165, gold)
+arc(from: 195, to: 70, red)
+arc(from: 70, to: 42, blue)
 
-// Schlanke Fahnenstange mit kleiner Kugel oben.
-let poleTop: CGFloat = 130
-ctx.setFillColor(color(0xFFFFFF))
-ctx.fill(CGRect(x: poleX, y: y(806), width: poleWidth, height: 806 - poleTop))
-ctx.fillEllipse(in: CGRect(x: poleX - 7, y: y(poleTop + 16), width: 32, height: 32))
-
-// Roter dreieckiger Wimpel.
-ctx.setFillColor(color(0xE4572E))
+// Grün, Fahnenstange, Wimpel.
+ctx.setFillColor(white)
+ctx.fillEllipse(in: CGRect(x: 72 - 17, y: 106 - 4.5, width: 34, height: 9))
+ctx.fill(CGRect(x: 68, y: 54, width: 5, height: 52))
+ctx.setFillColor(gold)
 ctx.beginPath()
-ctx.move(to: CGPoint(x: poleX + poleWidth, y: y(150)))
-ctx.addLine(to: CGPoint(x: 860, y: y(300)))
-ctx.addLine(to: CGPoint(x: poleX + poleWidth, y: y(450)))
+ctx.move(to: CGPoint(x: 73, y: 54))
+ctx.addLine(to: CGPoint(x: 100, y: 63))
+ctx.addLine(to: CGPoint(x: 73, y: 72))
 ctx.closePath()
 ctx.fillPath()
 

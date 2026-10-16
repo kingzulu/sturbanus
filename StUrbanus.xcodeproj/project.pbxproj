@@ -406,7 +406,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StUrbanus/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Caddy;
+				INFOPLIST_KEY_CFBundleDisplayName = "ZG-Caddy";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -448,7 +448,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StUrbanus/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Caddy;
+				INFOPLIST_KEY_CFBundleDisplayName = "ZG-Caddy";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -22,15 +22,15 @@
 	<array>
 		<dict>
 			<key>INAlternativeAppName</key>
+			<string>Caddy</string>
+		</dict>
+		<dict>
+			<key>INAlternativeAppName</key>
 			<string>Urbanus</string>
 		</dict>
 		<dict>
 			<key>INAlternativeAppName</key>
-			<string>Golf Caddy</string>
-		</dict>
-		<dict>
-			<key>INAlternativeAppName</key>
-			<string>Mein Caddy</string>
+			<string>ZG Caddy</string>
 		</dict>
 	</array>
 	<key>UILaunchScreen</key>

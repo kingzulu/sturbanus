@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// „Über Caddy“: Zulu-Golf-Logo, Leitsatz und Link zu zulugolf.de.
+/// „Über ZG-Caddy“: Zulu-Golf-Logo, Leitsatz und Link zu zulugolf.de.
 struct AboutView: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -30,7 +30,7 @@ struct AboutView: View {
                             .foregroundStyle(Color.zuluGold)
                         Text("Das Ziel im Blick.")
                             .font(.largeTitle.bold())
-                        Text("Caddy erfasst jeden Schlag, damit du siehst, wo du Schläge verlierst. Ein ruhiger Stand, ein klarer Gedanke, und mit jedem Schlag ein Stück besser.")
+                        Text("ZG-Caddy erfasst jeden Schlag, damit du siehst, wo du Schläge verlierst. Ein ruhiger Stand, ein klarer Gedanke, und mit jedem Schlag ein Stück besser.")
                             .font(.body)
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.white.opacity(0.75))

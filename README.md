@@ -1,4 +1,4 @@
-# Caddy – Golf-Caddy für iPhone (Projekt StUrbanus)
+# ZG-Caddy – Golf-Caddy für iPhone (Projekt StUrbanus)
 
 SwiftUI-App für iPhone (iOS 26). Jeder Schlag wird mit seinem Fehlermuster erfasst, damit sichtbar wird, wo Schläge verloren gehen. Alle Daten bleiben lokal (SwiftData).
 
@@ -26,7 +26,7 @@ Runde in der App starten, danach per „Hey Siri“ (auch über AirPods, auch be
 - „Caddy Spielstand“
 - „Caddy Runde beenden“
 
-Statt „Caddy“ versteht Siri auch „Urbanus“, „Golf Caddy“ und „Mein Caddy“.
+Die App heißt „ZG-Caddy“; Siri hört auf „Caddy“, „ZG Caddy“ und „Urbanus“.
 
 Siri antwortet gesprochen, z. B. „Drive, Rechts, Aus. Schlag 1 auf Loch 1.“ Das aktuelle Loch wird in der Runde gespeichert, App und Siri bleiben synchron.
 

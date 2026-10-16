@@ -89,7 +89,7 @@ struct EndRoundIntent: AppIntent {
     }
 }
 
-/// Siri-Sätze. Jeder Satz muss den App-Namen („Caddy“, alternativ „Urbanus“) enthalten.
+/// Siri-Sätze. Jeder Satz muss den App-Namen enthalten („ZG-Caddy“ bzw. die Ausweichnamen Caddy, ZG Caddy, Urbanus).
 struct UrbanusShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(

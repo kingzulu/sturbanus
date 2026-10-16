@@ -32,9 +32,9 @@ targets:
           UIColorName: ZGNavy
           UIImageName: ZGLaunchLogo
         INAlternativeAppNames:
+          - INAlternativeAppName: Caddy
           - INAlternativeAppName: Urbanus
-          - INAlternativeAppName: Golf Caddy
-          - INAlternativeAppName: Mein Caddy
+          - INAlternativeAppName: ZG Caddy
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.zuluindustries.StUrbanus
@@ -44,7 +44,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        INFOPLIST_KEY_CFBundleDisplayName: "Caddy"
+        INFOPLIST_KEY_CFBundleDisplayName: "ZG-Caddy"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSMicrophoneUsageDescription: "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen."

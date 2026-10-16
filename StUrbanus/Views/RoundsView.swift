@@ -52,14 +52,14 @@ struct RoundsView: View {
             .navigationTitle("Runden")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    // Zulu-Golf-Logo; führt zu „Über Caddy“.
+                    // Zulu-Golf-Logo; führt zu „Über ZG-Caddy“.
                     Button {
                         showAbout = true
                     } label: {
                         ZGBadge(height: 22)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Über Caddy")
+                    .accessibilityLabel("Über ZG-Caddy")
                 }
                 // Ohne den hellen Glas-Rahmen der Symbolleiste; das Logo hat seinen eigenen Hintergrund.
                 .sharedBackgroundVisibility(.hidden)
