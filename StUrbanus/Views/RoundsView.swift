@@ -8,6 +8,7 @@ struct RoundsView: View {
     @State private var path: [Round] = []
     @State private var roundToDelete: Round?
     @State private var choosingCourse = false
+    @State private var showAbout = false
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -21,6 +22,8 @@ struct RoundsView: View {
                             .frame(maxWidth: .infinity, minHeight: 56)
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(.zuluGold)
+                    .foregroundStyle(Color.zuluNavy)
                     .listRowInsets(EdgeInsets())
                     .disabled(courses.isEmpty)
                 } footer: {
@@ -45,6 +48,21 @@ struct RoundsView: View {
                 }
             }
             .navigationTitle("Runden")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    // Zulu-Golf-Logo; führt zu „Über Caddy“.
+                    Button {
+                        showAbout = true
+                    } label: {
+                        ZGBadge(height: 22)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Über Caddy")
+                }
+            }
+            .sheet(isPresented: $showAbout) {
+                AboutView()
+            }
             .navigationDestination(for: Round.self) { round in
                 RoundView(round: round) {
                     // Erst zurück zur Liste, dann löschen, damit keine Ansicht mehr auf die Runde zeigt.

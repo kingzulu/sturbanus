@@ -64,7 +64,8 @@ struct VoiceShotSheet: View {
                             .frame(maxWidth: .infinity, minHeight: 64)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(isListening ? .red : .accentColor)
+                    .tint(isListening ? .red : .zuluGold)
+                    .foregroundStyle(isListening ? Color.white : Color.zuluNavy)
 
                     Divider()
 

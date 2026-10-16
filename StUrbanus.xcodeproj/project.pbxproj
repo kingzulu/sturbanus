@@ -15,6 +15,8 @@
 		24E1368891B3EC1CC879FB29 /* RoundsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D99DA791F7557BC40686B3AE /* RoundsView.swift */; };
 		2724B5AEC858D3BC849514BE /* RoundService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D50211945FA1CD53B88C88B /* RoundService.swift */; };
 		2F609D912794BEE319C9E7E8 /* CoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF54D63F0EC2648530C0FF6E /* CoursesView.swift */; };
+		36E26809D7418663FD726CC4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E27CA2C1CB9FE16AB271529 /* Theme.swift */; };
+		4142F9D49C51FE76B2075943 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DF88C428EB8FC7C0CC843D3 /* AboutView.swift */; };
 		5FDE6C36A2F880BDED949750 /* ShotPhraseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */; };
 		66C4A625BCAD9D8813A79C50 /* RoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC3921713C3F7EE3970EF49 /* RoundView.swift */; };
 		77CCB6291BF6E5E8190135ED /* ShotEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A89081164E2344228B7EBEC /* ShotEnums.swift */; };
@@ -49,12 +51,14 @@
 		4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceShotSheet.swift; sourceTree = "<group>"; };
 		44F72B417A9D4C17F575A58F /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		49108CD2493245B25B58A41A /* ShotEntryPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotEntryPanel.swift; sourceTree = "<group>"; };
+		4E27CA2C1CB9FE16AB271529 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		548647FB369FD84AE1FDC608 /* StUrbanusTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = StUrbanusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		748DFCD27B15E79C8596C945 /* CourseServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseServiceTests.swift; sourceTree = "<group>"; };
 		75067A0A07D77AE4718005EF /* RoundIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundIntents.swift; sourceTree = "<group>"; };
 		8305D7AFE0149C907C574FBD /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		971FD44088A5EE7E09741E45 /* CourseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseService.swift; sourceTree = "<group>"; };
 		99C95D9D97779BA77B09A39C /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		9DF88C428EB8FC7C0CC843D3 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		AB1457518BC237ACC7D10ED4 /* ShotPhraseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPhraseParser.swift; sourceTree = "<group>"; };
 		BCC8A2619FD86C923642DD3A /* AppleSpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleSpeechRecognizer.swift; sourceTree = "<group>"; };
 		CBD7B377B9F466BC098DD5B8 /* ShotPhraseParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotPhraseParserTests.swift; sourceTree = "<group>"; };
@@ -133,11 +137,13 @@
 		A50DC3BA22B9219FC3A2CB5E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9DF88C428EB8FC7C0CC843D3 /* AboutView.swift */,
 				DF54D63F0EC2648530C0FF6E /* CoursesView.swift */,
 				D99DA791F7557BC40686B3AE /* RoundsView.swift */,
 				DCC3921713C3F7EE3970EF49 /* RoundView.swift */,
 				49108CD2493245B25B58A41A /* ShotEntryPanel.swift */,
 				EF4927BB454B3744067D3AF8 /* StatsView.swift */,
+				4E27CA2C1CB9FE16AB271529 /* Theme.swift */,
 				4391FBEEF5935BF61ACB0355 /* VoiceShotSheet.swift */,
 			);
 			path = Views;
@@ -264,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4142F9D49C51FE76B2075943 /* AboutView.swift in Sources */,
 				E68088497985437C02028033 /* AppModel.swift in Sources */,
 				EFF80C3DDADD79BA731F0CDC /* AppleSpeechRecognizer.swift in Sources */,
 				0A734B4BB3069D3FD38A85ED /* CourseService.swift in Sources */,
@@ -280,6 +287,7 @@
 				DCF9A73B21A3B44ED62CFE3C /* SpeechRecognizer.swift in Sources */,
 				1C8FC6243DFA9744D954ADBA /* StUrbanusApp.swift in Sources */,
 				8968EEBEA1A775D4765FD358 /* StatsView.swift in Sources */,
+				36E26809D7418663FD726CC4 /* Theme.swift in Sources */,
 				CB96AAEEE948F3DF674AF22E /* VoiceShotSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +410,6 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -445,7 +452,6 @@
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Das Mikrofon wird genutzt, um Schläge per Sprache zu erfassen.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Die Spracherkennung läuft auf dem Gerät und wandelt deine Ansage in einen Schlag-Eintrag um.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

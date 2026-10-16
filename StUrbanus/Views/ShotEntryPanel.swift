@@ -27,7 +27,7 @@ struct ShotEntryPanel: View {
                     save(shotType, result, consequence, gir: nil)
                 }
                 if !isGIRShot {
-                    BigButton(title: "Ohne Folge speichern", systemImage: "checkmark", tint: .accentColor) {
+                    BigButton.primary("Ohne Folge speichern", systemImage: "checkmark") {
                         save(shotType, result, nil, gir: nil)
                     }
                 }
@@ -131,6 +131,8 @@ struct BigButton: View {
     let title: String
     let systemImage: String
     let tint: Color
+    /// Schriftfarbe; auf Gold dunkel, damit es lesbar bleibt.
+    var textColor: Color = .white
     let action: () -> Void
 
     var body: some View {
@@ -141,5 +143,13 @@ struct BigButton: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(tint)
+        .foregroundStyle(textColor)
+    }
+}
+
+extension BigButton {
+    /// Hauptaktion im Zulu-Golf-Stil: Gold mit marineblauer Schrift.
+    static func primary(_ title: String, systemImage: String, action: @escaping () -> Void) -> BigButton {
+        BigButton(title: title, systemImage: systemImage, tint: .zuluGold, textColor: .zuluNavy, action: action)
     }
 }

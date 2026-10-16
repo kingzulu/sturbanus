@@ -136,9 +136,9 @@ private struct HolePicker: View {
                                 .font(.caption.monospacedDigit())
                             }
                             .frame(width: 44, height: 48)
-                            .background(score.holeNumber == selectedHole ? Color.accentColor : Color(.secondarySystemBackground),
+                            .background(score.holeNumber == selectedHole ? Color.zuluGold : Color(.secondarySystemBackground),
                                         in: RoundedRectangle(cornerRadius: 10))
-                            .foregroundStyle(score.holeNumber == selectedHole ? Color.white : Color.primary)
+                            .foregroundStyle(score.holeNumber == selectedHole ? Color.zuluNavy : Color.primary)
                         }
                         .id(score.holeNumber)
                     }
@@ -290,7 +290,7 @@ private struct HoleFinished: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             if let nextHole {
-                BigButton(title: "Weiter zu Loch \(nextHole)", systemImage: "chevron.right.circle.fill", tint: .accentColor, action: onNext)
+                BigButton.primary("Weiter zu Loch \(nextHole)", systemImage: "chevron.right.circle.fill", action: onNext)
             }
         }
         .padding(12)
