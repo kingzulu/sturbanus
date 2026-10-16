@@ -25,6 +25,8 @@ struct RoundsView: View {
                     .tint(.zuluGold)
                     .foregroundStyle(Color.zuluNavy)
                     .listRowInsets(EdgeInsets())
+                    // Kein weißer Zeilenhintergrund um den Knopf.
+                    .listRowBackground(Color.clear)
                     .disabled(courses.isEmpty)
                 } footer: {
                     if courses.isEmpty {
@@ -59,6 +61,8 @@ struct RoundsView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel("Über Caddy")
                 }
+                // Ohne den hellen Glas-Rahmen der Symbolleiste; das Logo hat seinen eigenen Hintergrund.
+                .sharedBackgroundVisibility(.hidden)
             }
             .sheet(isPresented: $showAbout) {
                 AboutView()
